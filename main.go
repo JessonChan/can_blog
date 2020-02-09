@@ -24,6 +24,6 @@ func main() {
 			}
 		}).
 		Run(cango.Addr{Port: 8099},
-			cango.StaticOpts{TplSuffix: ".html"},
+			cango.StaticOpts{TplSuffix: []string{".html", ".tpl"}},
 		)
 }
