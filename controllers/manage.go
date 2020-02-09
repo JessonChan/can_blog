@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -9,10 +10,9 @@ import (
 	"github.com/JessonChan/cango"
 	"github.com/astaxie/beego/orm"
 
-	"github.com/gorilla/sessions"
-
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/models"
+	"github.com/JessonChan/can_blog/session"
 	"github.com/JessonChan/can_blog/util"
 )
 
@@ -22,24 +22,6 @@ type ManageController struct {
 	controllerName string
 	actionName     string
 	o              orm.Ormer
-}
-
-type LoginFilter struct {
-	cango.Filter
-}
-
-func (l *LoginFilter) PreHandle(req *http.Request) interface{} {
-	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
-		return true
-	}
-	u, _ := LocalSession.Get(req, "user")
-	if u.IsNew {
-		return cango.Redirect{Url: "/admin/login"}
-	}
-	if u.Values["user"] == "admin" {
-		return true
-	}
-	return cango.Redirect{Url: "/admin/login"}
 }
 
 func (p *ManageController) prepare(actionName string) {
@@ -98,8 +80,6 @@ func (c *ManageController) Config(ps struct {
 	}
 }
 
-var LocalSession = sessions.NewCookieStore([]byte("something-very-secret"))
-
 // 后台用户登录
 func (c *ManageController) Login(ps struct {
 	cango.URI `value:"/login;/login.html"`
@@ -130,9 +110,12 @@ func (c *ManageController) Login(ps struct {
 	if _, err := c.o.Update(&user); err != nil {
 		return getErrorContent("登陆异常")
 	}
-	u, _ := LocalSession.New(c.Request().Request, "user")
+	u, _ := session.LocalSession.New(c.Request().Request, session.UserCookieName)
 	u.Values["user"] = ps.Username
-	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
+	err := u.Save(c.Request().Request, c.Request().ResponseWriter)
+	if err != nil {
+		log.Println("login in error", err)
+	}
 	return cango.Redirect{Url: "/admin/main"}
 }
 
@@ -140,7 +123,7 @@ func (c *ManageController) Logout(struct {
 	cango.URI `value:"/logout;/logout.html"`
 }) interface{} {
 	c.prepare("logout")
-	u, _ := LocalSession.Get(c.Request().Request, "user")
+	u, _ := session.LocalSession.Get(c.Request().Request, session.UserCookieName)
 	u.Values["user"] = nil
 	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
 	return cango.Redirect{Url: "/admin/main"}
