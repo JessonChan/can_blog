@@ -10,6 +10,9 @@
 <body>
 <script type="text/javascript" src="/static/plug/layui/layui.js"></script>
 <form class="layui-form" action="/admin/save"  method="post" style="margin:20px">
+    <div class="layui-form-item" >
+        <input type="hidden" name="post_id" value="{{.post.Id}}">
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">类型</label>
         <div class="layui-input-block">
