@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/JessonChan/cango v0.0.0
+	github.com/JessonChan/yorm v0.0.0-20150721080242-58615d853811
 	github.com/astaxie/beego v1.12.1
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gorilla/sessions v1.2.0

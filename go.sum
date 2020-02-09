@@ -1,5 +1,7 @@
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd h1:cSaQMcv6bYdcVhFBXLiohVbumMTenXZwXLONb/axwio=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd/go.mod h1:OK2/qpG2dVcQtCwB2KXhwGMbbIv+8TR85n1NKveRh9Y=
+github.com/JessonChan/yorm v0.0.0-20150721080242-58615d853811 h1:EgoeZANsxx/Tpj5H7DqFH9n+NwYaRcdKmj41uuZj4Zs=
+github.com/JessonChan/yorm v0.0.0-20150721080242-58615d853811/go.mod h1:mv9OcCgGBtcpopynJuuZ2QHBRn8TQU02FCugF+nd3js=
 github.com/Knetic/govaluate v3.0.0+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/OwnLocal/goes v1.0.0/go.mod h1:8rIFjBGTue3lCU0wplczcUgt9Gxgrkkrw7etMIcn8TM=
 github.com/astaxie/beego v1.12.1 h1:dfpuoxpzLVgclveAXe4PyNKqkzgm5zF4tgF2B3kkM2I=

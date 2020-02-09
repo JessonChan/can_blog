@@ -1,25 +1,22 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
+	"github.com/JessonChan/yorm"
 	"github.com/astaxie/beego/orm"
 )
 
+var dsn = "root:123456@tcp(127.0.0.1:3306)/can_blog?charset=utf8&loc=Asia%2FShanghai"
+var dbPrefix = "cb_"
+
 func init() {
-	dbhost := beego.AppConfig.String("dbhost")
-	dbport := beego.AppConfig.String("dbport")
-	dbuser := beego.AppConfig.String("dbuser")
-	dbpassword := beego.AppConfig.String("dbpassword")
-	dbname := beego.AppConfig.String("dbname")
-	if dbport == "" {
-		dbport = "3306"
-	}
-	dsn := dbuser + ":" + dbpassword + "@tcp(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=utf8&loc=Asia%2FShanghai"
-	orm.RegisterDataBase("default", "mysql", dsn)
+	yorm.SetLoggerLevel("Debug")
+	yorm.Register(dsn)
+	yorm.RegisterTableFunc(TableName)
+	_ = orm.RegisterDataBase("default", "mysql", dsn)
 	orm.RegisterModel(new(User), new(Category), new(Post), new(Config), new(Comment))
 }
 
-//返回带前缀的表名
+// 返回带前缀的表名
 func TableName(str string) string {
-	return beego.AppConfig.String("dbprefix") + str
+	return dbPrefix + str
 }

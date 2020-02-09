@@ -48,7 +48,7 @@ func (c *ManageController) Config(ps struct {
 
 	result := manager.GetConfig()
 	options := make(map[string]string)
-	mp := make(map[string]*models.Config)
+	mp := make(map[string]models.Config)
 	for _, v := range result {
 		options[v.Name] = v.Value
 		mp[v.Name] = v
