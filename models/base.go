@@ -9,7 +9,6 @@ var dsn = "root:123456@tcp(127.0.0.1:3306)/can_blog?charset=utf8&loc=Asia%2FShan
 var dbPrefix = "cb_"
 
 func init() {
-	yorm.SetLoggerLevel("Debug")
 	yorm.Register(dsn)
 	yorm.RegisterTableFunc(TableName)
 	_ = orm.RegisterDataBase("default", "mysql", dsn)
