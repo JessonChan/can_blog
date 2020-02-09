@@ -1,11 +1,9 @@
 package controllers
 
 import (
-	"html/template"
 	"time"
 
 	"github.com/JessonChan/cango"
-	"github.com/astaxie/beego/orm"
 
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/models"
@@ -17,7 +15,6 @@ type PageController struct {
 	Data           map[interface{}]interface{}
 	controllerName string
 	actionName     string
-	o              orm.Ormer
 }
 type query struct {
 	page    int
@@ -30,14 +27,11 @@ func (c *PageController) list(actionName string, q query) {
 		pagesize int = 6
 		page     int
 		offset   int
-		list     []*models.Post
-		hosts    []*models.Post
+		list     []models.Post
 		// cateId   int
 		// keyword  string
 	)
 
-	orm.Debug = true
-	c.o = orm.NewOrm()
 	var result = manager.GetConfig()
 	configs := make(map[string]string)
 	for _, v := range result {
@@ -52,33 +46,24 @@ func (c *PageController) list(actionName string, q query) {
 		page = 1
 	}
 
+	var count int
 	offset = (page - 1) * pagesize
-	query := c.o.QueryTable(new(models.Post).TableName())
-
-	if actionName == "resource" {
-		query = query.Filter("types", 0)
+	if q.cateId == 0 {
+		count = manager.CountArticles()
+		if count > offset {
+			list = manager.NewArticles(offset, pagesize)
+		}
 	} else {
-		query = query.Filter("types", 1)
+		count = manager.CountCateArticles(q.cateId)
+		if count > offset {
+			list = manager.CateArticles(q.cateId, offset, pagesize)
+		}
 	}
-
-	if q.cateId != 0 {
-		query = query.Filter("category_id", q.cateId)
-	}
-	if q.keyword != "" {
-		query = query.Filter("title__contains", q.keyword)
-	}
-	query.OrderBy("-views").Limit(10, 0).All(&hosts)
-
-	if actionName == "home" {
-		query = query.Filter("is_top", 1)
-	}
-	count, _ := query.Count()
 	c.Data["count"] = count
-	query.OrderBy("-created").Limit(pagesize, offset).All(&list)
 
 	c.Data["list"] = list
 	c.Data["pagebar"] = util.NewPager(page, int(count), pagesize, "/"+actionName, true).ToString()
-	c.Data["hosts"] = hosts
+	c.Data["hosts"] = manager.HotArticles(10)
 }
 
 /**
@@ -119,24 +104,11 @@ func (c *PageController) Detail(ps struct {
 	if ps.Id == 0 {
 		return cango.Redirect{Url: "/", Code: 302}
 	}
-	c.o = orm.NewOrm()
-	c.Data = map[interface{}]interface{}{}
-	post := models.Post{Id: ps.Id}
-	_ = c.o.Read(&post)
-	post.Views++
-	_, _ = c.o.Update(&post)
-	c.Data["post"] = post
-	c.Data["htmlContent"] = template.HTML(post.Content)
-	comments := []*models.Comment{}
-	query := c.o.QueryTable(new(models.Comment).TableName()).Filter("post_id", ps.Id)
-	query.All(&comments)
-	c.Data["comments"] = comments
+	c.Data["post"] = manager.ReadPost(ps.Id)
+	c.Data["comments"] = manager.CommentList(ps.Id)
 
 	c.Data["cates"] = manager.GetAllCate()
-	var hosts []*models.Post
-	querys := c.o.QueryTable(new(models.Post).TableName()).Filter("types", 1)
-	querys.OrderBy("-views").Limit(10, 0).All(&hosts)
-	c.Data["hosts"] = hosts
+	c.Data["hosts"] = manager.HotArticles(10)
 	c.Data["actionName"] = "detail"
 	return cango.ModelView{Tpl: "/blog/detail.html", Model: c.Data}
 }
@@ -147,11 +119,8 @@ func (c *PageController) Detail(ps struct {
 func (c *PageController) About(struct {
 	cango.URI `value:"about.html"`
 }) interface{} {
-	c.o = orm.NewOrm()
 	c.Data = map[interface{}]interface{}{}
-	post := models.Post{Id: 1}
-	c.o.Read(&post)
-	c.Data["post"] = post
+	c.Data["post"] = manager.ReadPost(1)
 	c.Data["actionName"] = "about"
 	return cango.ModelView{Tpl: "/blog/about.html", Model: c.Data}
 }
@@ -182,15 +151,14 @@ func (c *PageController) Comment(ps struct {
 	Content  string
 	Post_id  int
 }) interface{} {
-	c.o = orm.NewOrm()
-	Comment := models.Comment{}
-	Comment.Username = ps.UserName
-	Comment.Content = ps.Content
-	Comment.PostId = ps.Post_id
-	Comment.Ip = c.Request().Request.RemoteAddr
-	Comment.Created = time.Now()
+	comment := models.Comment{}
+	comment.Username = ps.UserName
+	comment.Content = ps.Content
+	comment.PostId = ps.Post_id
+	comment.Ip = c.Request().Request.RemoteAddr
+	comment.Created = time.Now()
 	msg := "发布评价成功"
-	_, err := c.o.Insert(&Comment)
+	err := manager.AddComment(comment)
 	if err != nil {
 		msg = "发布评价失败" + err.Error()
 	}

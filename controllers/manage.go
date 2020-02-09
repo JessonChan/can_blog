@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/JessonChan/cango"
-	"github.com/astaxie/beego/orm"
 
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/models"
@@ -21,14 +20,12 @@ type ManageController struct {
 	Data           map[interface{}]interface{}
 	controllerName string
 	actionName     string
-	o              orm.Ormer
 }
 
 func (p *ManageController) prepare(actionName string) {
 	p.Data = map[interface{}]interface{}{}
 	p.controllerName = "admin"
 	p.actionName = actionName
-	p.o = orm.NewOrm()
 }
 
 // 配置信息

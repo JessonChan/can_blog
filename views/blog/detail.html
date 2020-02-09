@@ -20,7 +20,7 @@
                         <span>浏览量：{{.post.Views}}</span>
                     </div>
                     <div class="article-detail-content">
-                      {{.htmlContent}}
+                        {{str2html .post.Content}}
                     </div>
                 </div>
                 <!-- 评论区域 -->
@@ -32,7 +32,8 @@
                                 <div class="layui-form-item">
 
                                     <input type="hidden" name="post_id" value="{{.post.Id}}">
-                                    <input type="text" name="username"  lay-verify="required" placeholder="请输你的昵称" autocomplete="off" class="layui-input">
+                                    <input type="text" name="username" lay-verify="required" placeholder="请输你的昵称"
+                                           autocomplete="off" class="layui-input">
                                 </div>
 
                                 <div class="layui-form-item">
@@ -51,17 +52,17 @@
                     <div class="blog-module-title">最新评论</div>
                     <ul class="blog-comment">
                         {{range .comments}}
-                        <li>
-                            <div class="comment-parent">
-                                <div class="info">
-                                    <span class="username">{{.Username}}</span>
-                                    <span class="time">{{date .Created "Y-m-d H:i:s"}}</span>
+                            <li>
+                                <div class="comment-parent">
+                                    <div class="info">
+                                        <span class="username">{{.Username}}</span>
+                                        <span class="time">{{date .Created "Y-m-d H:i:s"}}</span>
+                                    </div>
+                                    <div class="content">
+                                        {{str2html .Content}}
+                                    </div>
                                 </div>
-                                <div class="content">
-                                    {{str2html .Content}}
-                                </div>
-                            </div>
-                        </li>
+                            </li>
                         {{end}}
                     </ul>
                 </div>
@@ -75,7 +76,7 @@
 
 <textarea id="demo" style="display: none;"></textarea>
 <script>
-    layui.use('layedit', function(){
+    layui.use('layedit', function () {
         var layedit = layui.layedit;
         layedit.build('remarkEditor'); //建立编辑器
     });
