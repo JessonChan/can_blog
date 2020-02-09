@@ -17,8 +17,11 @@ import (
 )
 
 type ManageController struct {
-	baseController
-	cango.URI `value:"/admin"`
+	cango.URI      `value:"/admin"`
+	Data           map[interface{}]interface{}
+	controllerName string
+	actionName     string
+	o              orm.Ormer
 }
 
 type LoginFilter struct {
@@ -33,7 +36,10 @@ func (l *LoginFilter) PreHandle(req *http.Request) interface{} {
 	if u.IsNew {
 		return cango.Redirect{Url: "/admin/login"}
 	}
-	return true
+	if u.Values["user"] == "admin" {
+		return true
+	}
+	return cango.Redirect{Url: "/admin/login"}
 }
 
 func (p *ManageController) prepare(actionName string) {
@@ -126,14 +132,18 @@ func (c *ManageController) Login(ps struct {
 	}
 	u, _ := LocalSession.New(c.Request().Request, "user")
 	u.Values["user"] = ps.Username
-	err := u.Save(c.Request().Request, c.Request().ResponseWriter)
-	fmt.Println(err)
+	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
 	return cango.Redirect{Url: "/admin/main"}
 }
 
-func (c *ManageController) Logout() {
-	c.DestroySession()
-	c.History("退出登录", "/admin/login.html")
+func (c *ManageController) Logout(struct {
+	cango.URI `value:"/logout;/logout.html"`
+}) interface{} {
+	c.prepare("logout")
+	u, _ := LocalSession.Get(c.Request().Request, "user")
+	u.Values["user"] = nil
+	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
+	return cango.Redirect{Url: "/admin/main"}
 }
 
 // 后台首页

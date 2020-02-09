@@ -14,7 +14,10 @@ import (
 
 type PageController struct {
 	cango.URI
-	baseController
+	Data           map[interface{}]interface{}
+	controllerName string
+	actionName     string
+	o              orm.Ormer
 }
 type query struct {
 	page    int
