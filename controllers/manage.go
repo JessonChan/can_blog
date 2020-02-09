@@ -64,14 +64,14 @@ func (c *ManageController) Config(ps struct {
 }) interface{} {
 	c.prepare("config")
 
-	var result []*models.Config
-	_, _ = c.o.QueryTable(new(models.Config).TableName()).All(&result)
+	result := manager.GetConfig()
 	options := make(map[string]string)
 	mp := make(map[string]*models.Config)
 	for _, v := range result {
 		options[v.Name] = v.Value
 		mp[v.Name] = v
 	}
+
 	if c.Request().Request.Method == "POST" {
 		keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
 		values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
@@ -116,7 +116,7 @@ func (c *ManageController) Login(ps struct {
 		}
 	}
 	user := models.User{Username: ps.Username}
-	c.o.Read(&user, "username")
+	_ = c.o.Read(&user, "username")
 
 	if user.Password == "" {
 		return getErrorContent("账号不存在")
@@ -169,7 +169,6 @@ func (c *ManageController) Index(ps struct {
 		page = 1
 	}
 	offset = (page - 1) * pagesize
-	// c.Ctx.WriteString(new(models.Post).TableName())
 	query := c.o.QueryTable(new(models.Post).TableName())
 	if keyword != "" {
 		query = query.Filter("title__contains", keyword)

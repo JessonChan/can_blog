@@ -1,5 +1,3 @@
-github.com/JessonChan/fargo v0.0.0-20150918021244-30f434642c45 h1:ZWLubXwLChwi1fXZKyREF3WMWjA7TK4sD2WgC3CYK+s=
-github.com/JessonChan/fargo v0.0.0-20150918021244-30f434642c45/go.mod h1:f2FN0GYEt2fvFvmbdEp5BTK8jo6DThVNvjWteCgszOU=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd h1:cSaQMcv6bYdcVhFBXLiohVbumMTenXZwXLONb/axwio=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd/go.mod h1:OK2/qpG2dVcQtCwB2KXhwGMbbIv+8TR85n1NKveRh9Y=
 github.com/Knetic/govaluate v3.0.0+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=

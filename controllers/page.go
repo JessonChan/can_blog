@@ -38,8 +38,7 @@ func (c *PageController) list(actionName string, q query) {
 
 	orm.Debug = true
 	c.o = orm.NewOrm()
-	var result []*models.Config
-	c.o.QueryTable(new(models.Config).TableName()).All(&result)
+	var result = manager.GetConfig()
 	configs := make(map[string]string)
 	for _, v := range result {
 		configs[v.Name] = v.Value
