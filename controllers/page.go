@@ -104,6 +104,7 @@ func (c *PageController) Detail(ps struct {
 	if ps.Id == 0 {
 		return cango.Redirect{Url: "/", Code: 302}
 	}
+	c.Data = map[interface{}]interface{}{}
 	c.Data["post"] = manager.ReadPost(ps.Id)
 	c.Data["comments"] = manager.CommentList(ps.Id)
 

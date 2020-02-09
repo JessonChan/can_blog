@@ -9,6 +9,7 @@ var dbPrefix = "cb_"
 
 func init() {
 	yorm.Register(dsn)
+	yorm.SetLoggerLevel("DEBUG")
 	yorm.RegisterTableFunc(TableName)
 }
 

@@ -43,32 +43,16 @@ func (c *ManageController) Config(ps struct {
 }) interface{} {
 	c.prepare("config")
 
-	result := manager.GetConfig()
-	options := make(map[string]string)
-	mp := make(map[string]*models.Config)
-	for _, v := range result {
-		options[v.Name] = v.Value
-		mp[v.Name] = &v
+	keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
+	values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
+	for idx, key := range keys {
+		manager.UpdateConfig(key, values[idx])
 	}
+	cfs := manager.GetConfig()
+	options := map[string]string{}
 
-	if c.Request().Request.Method == "POST" {
-		keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
-		values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
-		for idx, key := range keys {
-			if values[idx] == "" {
-				continue
-			}
-			if _, ok := mp[key]; !ok {
-				options[key] = values[idx]
-				_, _ = c.o.Insert(&models.Config{Name: key, Value: values[idx]})
-			} else {
-				opt := mp[key]
-				if _, err := c.o.Update(&models.Config{Id: opt.Id, Name: opt.Name, Value: values[idx]}); err != nil {
-					continue
-				}
-			}
-		}
-		return getErrorContent("配置出错")
+	for _, cf := range cfs {
+		options[cf.Name] = cf.Value
 	}
 	c.Data["config"] = options
 	return cango.ModelView{
@@ -92,20 +76,13 @@ func (c *ManageController) Login(ps struct {
 			Model: c.Data,
 		}
 	}
-	user := models.User{Username: ps.Username}
-	_ = c.o.Read(&user, "username")
-
-	if user.Password == "" {
+	user := manager.GetUserByName(ps.Username)
+	if user == nil || user.Password == "" {
 		return getErrorContent("账号不存在")
 	}
 
 	if util.Md5(ps.Password) != strings.Trim(user.Password, " ") {
 		return getErrorContent("密码错误")
-	}
-	user.LastIp = c.Request().Request.RemoteAddr
-	user.LoginCount = user.LoginCount + 1
-	if _, err := c.o.Update(&user); err != nil {
-		return getErrorContent("登陆异常")
 	}
 	u, _ := session.LocalSession.New(c.Request().Request, session.UserCookieName)
 	u.Values["user"] = ps.Username
@@ -139,9 +116,9 @@ func (c *ManageController) Index(ps struct {
 		page     int
 		pagesize int = 8
 		offset   int
-		list     []*models.Post
-		keyword  string
-		cateId   int
+		// list     []*models.Post
+		keyword string
+		cateId  int
 	)
 	keyword = ps.Title
 	cateId = ps.Cate_id
@@ -149,17 +126,11 @@ func (c *ManageController) Index(ps struct {
 		page = 1
 	}
 	offset = (page - 1) * pagesize
-	query := c.o.QueryTable(new(models.Post).TableName())
-	if keyword != "" {
-		query = query.Filter("title__contains", keyword)
-	}
-	count, _ := query.Count()
-	if count > 0 {
-		_, _ = query.OrderBy("-is_top", "-created").Limit(pagesize, offset).All(&list)
-	}
+
 	c.Data["keyword"] = keyword
+	count := manager.CountArticles()
 	c.Data["count"] = count
-	c.Data["list"] = list
+	c.Data["list"] = manager.NewArticles(offset, pagesize)
 	c.Data["cate_id"] = cateId
 	c.Data["pagebar"] = util.NewPager(page, int(count), pagesize,
 		fmt.Sprintf("/admin/index.html?keyword=%s", keyword), true).ToString()
@@ -187,9 +158,7 @@ func (c *ManageController) Article(ps struct {
 }) interface{} {
 	c.prepare("article")
 	if ps.Id > 0 {
-		post := models.Post{Id: ps.Id}
-		c.o.Read(&post)
-		c.Data["post"] = post
+		c.Data["post"] = manager.ReadPost(ps.Id, true)
 	}
 	c.Data["categorys"] = manager.GetAllCate()
 	return cango.ModelView{
@@ -227,7 +196,7 @@ func (c *ManageController) Article(ps struct {
 func (c *ManageController) Save(ps struct {
 	cango.URI `value:"/save"`
 	cango.PostMethod
-	Id      int
+	Post_id int
 	Title   string
 	Content string
 	Is_top  int8
@@ -253,15 +222,11 @@ func (c *ManageController) Save(ps struct {
 	post.Created = time.Now()
 	post.Updated = time.Now()
 
-	var err error
-	if ps.Id == 0 {
-		_, err = c.o.Insert(&post)
+	if ps.Post_id == 0 {
+		manager.AddPost(post)
 	} else {
-		post.Id = ps.Id
-		_, err = c.o.Update(&post)
-	}
-	if err != nil {
-		return getErrorContent("参数错误")
+		post.Id = ps.Post_id
+		manager.UpdatePost(post)
 	}
 	return cango.Redirect{
 		Url:  "/admin/index.html",
@@ -284,7 +249,7 @@ func (c *ManageController) Delete(ps struct {
 	if ps.Id == 0 {
 		return getErrorContent("参数错误")
 	}
-	if _, err := c.o.Delete(&models.Post{Id: ps.Id}); err != nil {
+	if _, err := manager.DeletePost(ps.Id); err != nil {
 		return getErrorContent("未能成功删除")
 	}
 	return cango.Redirect{Url: "/admin/index.html"}
@@ -309,9 +274,7 @@ func (c *ManageController) Categoryadd(ps struct {
 }) interface{} {
 	c.prepare("categoryadd")
 	if ps.Id != 0 {
-		cate := models.Category{Id: ps.Id}
-		c.o.Read(&cate)
-		c.Data["cate"] = cate
+		c.Data["cate"] = manager.ReadCate(ps.Id)
 	}
 	return cango.ModelView{
 		Tpl:   "/admin/category_add.html",
@@ -329,16 +292,13 @@ func (c *ManageController) CategorySave(ps struct {
 	c.prepare("categorysave")
 	category := models.Category{}
 	category.Name = ps.Name
-	var err error
 	if ps.Id == 0 {
-		_, err = c.o.Insert(&category)
+		manager.AddCate(category)
 	} else {
 		category.Id = ps.Id
-		_, err = c.o.Update(&category)
+		manager.UpdateCate(category)
 	}
-	if err != nil {
-		return getErrorContent("数据错误")
-	}
+
 	return cango.Redirect{Url: "/admin/category.html"}
 }
 
@@ -350,7 +310,7 @@ func (c *ManageController) CategoryDel(ps struct {
 	if ps.Id == 0 {
 		return getErrorContent("参数错误")
 	}
-	if _, err := c.o.Delete(&models.Category{Id: ps.Id}); err != nil {
+	if _, err := manager.DeleteCate(ps.Id); err != nil {
 		return getErrorContent("参数错误")
 	} else {
 		return cango.Redirect{Url: "/admin/category.html"}

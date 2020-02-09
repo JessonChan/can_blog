@@ -19,6 +19,21 @@ func GetConfig() (configs []models.Config) {
 	return
 }
 
+func UpdateConfig(k, v string) {
+	_, err := yorm.Update("update "+new(models.Config).TableName()+" set value=? where key=? and value<>?", v, k, v)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func GetUserByName(name string) (user *models.User) {
+	err := yorm.Select(user, "select * from "+new(models.User).TableName()+" where user_name=?", name)
+	if err != nil {
+		log.Println(err)
+	}
+	return
+}
+
 func AddComment(comment models.Comment) error {
 	_, err := yorm.Insert(&comment)
 	if err != nil {
@@ -27,27 +42,74 @@ func AddComment(comment models.Comment) error {
 	return err
 }
 
-func ReadPost(postId int) *models.Post {
+func ReadCate(cateId int) *models.Category {
+	cate := models.Category{}
+	err := yorm.Select(&cate, "select * from "+new(models.Category).TableName()+" where id=?", cateId)
+	if err != nil {
+		log.Println(err)
+	}
+	return &cate
+}
+
+func AddCate(cate models.Category) {
+	_, err := yorm.Insert(&cate)
+	if err != nil {
+		log.Println(err)
+	}
+}
+func UpdateCate(cate models.Category) {
+	_, err := yorm.Update("update "+new(models.Category).TableName()+" set name=? ,updated=now() where id=? ", cate.Name, cate.Id)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func DeleteCate(cateId int) (int64, error) {
+	return yorm.Delete("delete from "+new(models.Category).TableName()+"  where id=?", cateId)
+}
+
+func AddPost(post models.Post) {
+	_, err := yorm.Insert(&post)
+	if err != nil {
+		log.Println(err)
+	}
+}
+func UpdatePost(ps models.Post) {
+	_, err := yorm.Update("update "+new(models.Post).TableName()+" set title=?,content=?,category_id=?,info=?,  updated=now() where id=?", ps.Title, ps.Content, ps.CategoryId, ps.Info, ps.Id)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func DeletePost(postId int) (int64, error) {
+	return yorm.Delete("delete from "+new(models.Post).TableName()+" where id=?", postId)
+}
+
+func ReadPost(postId int, readOnly ...bool) *models.Post {
 	post := &models.Post{Id: postId}
-	err := yorm.R(&post)
+	err := yorm.R(post)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
+	if append(readOnly, false)[0] {
+		return post
+	}
 	// todo 这里会有并发写入问题
-	_, err = yorm.Update("update "+post.TableName()+" set views=views+1 where id=?", post, post.Views)
+	_, err = yorm.Update("update "+new(models.Post).TableName()+" set views=views+1 where id=?", postId)
 	if err != nil {
 		log.Println(err)
 	}
 	post.Views++
 	return post
 }
-func CommentList(postId int) (list []models.Comment) {
+func CommentList(postId int) []models.Comment {
+	var list []models.Comment
 	err := yorm.R(&list, "select * from "+new(models.Comment).TableName()+" where post_id=?", postId)
 	if err != nil {
 		log.Println(err)
 	}
-	return
+	return list
 }
 
 func HotArticles(limit int) (hots []models.Post) {
