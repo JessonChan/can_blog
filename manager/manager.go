@@ -20,18 +20,19 @@ func GetConfig() (configs []models.Config) {
 }
 
 func UpdateConfig(k, v string) {
-	_, err := yorm.Update("update "+new(models.Config).TableName()+" set value=? where key=? and value<>?", v, k, v)
+	_, err := yorm.Update("update "+new(models.Config).TableName()+" set value=? where name=? and value<>?", v, k, v)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func GetUserByName(name string) (user *models.User) {
-	err := yorm.Select(user, "select * from "+new(models.User).TableName()+" where user_name=?", name)
+func GetUserByName(name string) *models.User {
+	user := &models.User{}
+	err := yorm.Select(user, "select * from "+user.TableName()+" where username=?", name)
 	if err != nil {
 		log.Println(err)
 	}
-	return
+	return user
 }
 
 func AddComment(comment models.Comment) error {

@@ -43,10 +43,14 @@ func (c *ManageController) Config(ps struct {
 }) interface{} {
 	c.prepare("config")
 
-	keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
-	values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
-	for idx, key := range keys {
-		manager.UpdateConfig(key, values[idx])
+	if c.Request().Request.Method == http.MethodPost {
+		keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
+		values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
+		for idx, key := range keys {
+			if values[idx] != "" {
+				manager.UpdateConfig(key, values[idx])
+			}
+		}
 	}
 	cfs := manager.GetConfig()
 	options := map[string]string{}

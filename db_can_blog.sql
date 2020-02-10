@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.28)
 # Database: can_blog
-# Generation Time: 2020-02-09 03:33:09 +0000
+# Generation Time: 2020-02-10 01:41:14 +0000
 # ************************************************************
 
 
@@ -26,20 +26,21 @@
 DROP TABLE IF EXISTS `cb_category`;
 
 CREATE TABLE `cb_category` (
-                               `id` int(11) NOT NULL AUTO_INCREMENT,
-                               `name` varchar(255) NOT NULL,
-                               `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                               `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                               PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `cb_category` WRITE;
 /*!40000 ALTER TABLE `cb_category` DISABLE KEYS */;
 
 INSERT INTO `cb_category` (`id`, `name`, `created`, `updated`)
 VALUES
-(2,'美好生活','2020-02-08 18:11:54','2020-02-08 18:11:54'),
-(4,'编程相关','2020-02-08 18:11:40','2020-02-08 18:11:40');
+	(2,'美好生活','2020-02-09 15:35:44','2020-02-09 15:35:44'),
+	(4,'编程相关','2020-02-08 18:11:40','2020-02-08 18:11:40'),
+	(7,'Golang编程','2020-02-09 15:33:37','2020-02-09 21:55:08');
 
 /*!40000 ALTER TABLE `cb_category` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -51,36 +52,15 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_comment`;
 
 CREATE TABLE `cb_comment` (
-                              `id` int(11) NOT NULL AUTO_INCREMENT,
-                              `username` varchar(200) DEFAULT NULL,
-                              `content` varchar(500) DEFAULT NULL,
-                              `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                              `ip` varchar(100) DEFAULT NULL,
-                              `post_id` int(11) DEFAULT NULL,
-                              PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(200) DEFAULT NULL,
+  `content` varchar(500) DEFAULT NULL,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ip` varchar(100) DEFAULT NULL,
+  `post_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
-LOCK TABLES `cb_comment` WRITE;
-/*!40000 ALTER TABLE `cb_comment` DISABLE KEYS */;
-
-INSERT INTO `cb_comment` (`id`, `username`, `content`, `created`, `ip`, `post_id`)
-VALUES
-(4,'dsdfsfdsfds','fsdfdsfds','2017-08-16 15:34:09','[',0),
-(5,'dsfds','fdsfds','2017-08-09 15:41:12','111',1),
-(7,'fsdfdsfdsfds','sdfdsfdsf',NULL,'[',8),
-(8,'sdfdsfds','fsdfdsfdsfds',NULL,'[',8),
-(9,'fdsfdsfdsfds','<p style=\"text-align: left;\"><b>fdsfdsfdsffdsfdsfdsfdsfdsdsfdsfds</b></p><p style=\"text-align: left;\"><b><br></b></p><p style=\"text-align: left;\"><b>a. fsdfdsf</b></p>','2017-08-09 15:42:54','[',8),
-(10,'test','<u>stssssfff</u>','2020-02-08 09:45:59','127.0.0.1:52918',9),
-(11,'test','hello','2020-02-08 09:47:29','127.0.0.1:52950',9),
-(12,'test','aaaa','2020-02-08 09:48:19','127.0.0.1',9),
-(13,'ssssfff','aaaa','2020-02-08 09:48:51','127.0.0.1',9),
-(14,'ffff','aaaa','2020-02-08 09:49:47','127.0.0.1',9),
-(15,'test','aaaaffff','2020-02-08 09:50:40','127.0.0.1:53261',9),
-(16,'ssss','fssss','2020-02-08 09:51:42','127.0.0.1:53337',9),
-(17,'sss','fff','2020-02-08 09:52:02','127.0.0.1:53356',9);
-
-/*!40000 ALTER TABLE `cb_comment` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table cb_config
@@ -89,11 +69,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_config`;
 
 CREATE TABLE `cb_config` (
-                             `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-                             `name` varchar(30) NOT NULL DEFAULT '',
-                             `value` text NOT NULL,
-                             PRIMARY KEY (`id`),
-                             UNIQUE KEY `name` (`name`)
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `cb_config` WRITE;
@@ -101,14 +81,14 @@ LOCK TABLES `cb_config` WRITE;
 
 INSERT INTO `cb_config` (`id`, `name`, `value`)
 VALUES
-(1,'title','Cango blog 例子'),
-(2,'url','http://www.ptapp.cnsdfdsfds'),
-(5,'keywords','dsfds'),
-(6,'description','这是一个使用Cango 框架开发的博客网站'),
-(7,'email','example@example.com'),
-(9,'timezone','8'),
-(11,'start','1'),
-(12,'qq','10010');
+	(1,'title','Cango blog 源码'),
+	(2,'url','https://github.com/JessonChan/can_blog'),
+	(5,'keywords','golang Cango'),
+	(6,'description','使用Cango 框架开发的博客网站'),
+	(7,'email','example@example.com'),
+	(9,'timezone','8'),
+	(11,'start','1'),
+	(12,'qq','10010');
 
 /*!40000 ALTER TABLE `cb_config` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -120,36 +100,33 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_post`;
 
 CREATE TABLE `cb_post` (
-                           `id` int(11) NOT NULL AUTO_INCREMENT,
-                           `user_id` int(11) NOT NULL,
-                           `title` varchar(255) NOT NULL,
-                           `url` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '下载地址',
-                           `content` mediumtext,
-                           `tags` varchar(100) NOT NULL,
-                           `views` mediumint(9) NOT NULL,
-                           `status` tinyint(4) NOT NULL,
-                           `is_top` tinyint(4) NOT NULL DEFAULT '0',
-                           `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                           `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                           `category_id` int(11) NOT NULL,
-                           `types` tinyint(4) DEFAULT NULL COMMENT '1. 文章 0 下载',
-                           `info` varchar(500) CHARACTER SET utf8 DEFAULT NULL COMMENT '简介',
-                           `image` varchar(200) DEFAULT NULL,
-                           PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '下载地址',
+  `content` mediumtext,
+  `tags` varchar(100) NOT NULL,
+  `views` mediumint(9) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `is_top` tinyint(4) NOT NULL DEFAULT '0',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `category_id` int(11) NOT NULL,
+  `types` tinyint(4) DEFAULT NULL COMMENT '1. 文章 0 下载',
+  `info` varchar(500) CHARACTER SET utf8 DEFAULT NULL COMMENT '简介',
+  `image` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `cb_post` WRITE;
 /*!40000 ALTER TABLE `cb_post` DISABLE KEYS */;
 
 INSERT INTO `cb_post` (`id`, `user_id`, `title`, `url`, `content`, `tags`, `views`, `status`, `is_top`, `created`, `updated`, `category_id`, `types`, `info`, `image`)
 VALUES
-(8,1,'dsfdsfds','http://www.baidu.com','<p>fdsfdsfdsfdsfds</p>','aaaa,xxxx,dddd,uuu,xxx',0,0,1,'2017-08-08 17:09:22','2017-08-08 17:09:22',2,1,NULL,NULL),
-(9,1,'dfsfdsf','http://sfdsfds.omc','<p>fsdfdsfds</p>','fsdfds',0,0,1,'2017-08-08 17:09:41','2017-08-08 17:09:41',2,0,NULL,NULL),
-(11,1,'腾讯公司简介','http://www.qq.com','<p>腾讯公司成立于1998年11月，是目前中国最大的互联网综合服务提供商之一，也是中国服务用户最多的互联网企业之一。成立十年多以来，腾讯一直秉承“一切以用户价值为依归”的经营理念，始终处于稳健发展的状态。2004年6月16日，腾讯公司在香港联交所主板公开上市(股票代号700)。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　通过互联网服务提升人类生活品质是腾讯公司的使命。目前，腾讯把为用户提供“一站式在线生活服务”作为战略目标，提供互联网增值服务、移动及电信增值服务和网络广告服务。通过即时通信QQ、腾讯网(QQ.com)、腾讯游戏、QQ空间、无线门户、搜搜、拍拍、财付通等中国领先的网络平台，腾讯打造了中国最大的网络社区，满足互联网用户沟通、资讯、娱乐和电子商务等方面的需求。截至2011年9月30日，QQ即时通信的活跃帐户数达到7.117亿，最高同时在线帐户数达到1.454亿。腾讯的发展深刻地影响和改变了数以亿计网民的沟通方式和生活习惯，并为中国互联网行业开创了更加广阔的应用前景。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　面向未来，坚持自主创新，树立民族品牌是腾讯公司的长远发展规划。目前，腾讯50%以上员工为研发人员。腾讯在即时通信、电子商务、在线支付、搜索引擎、信息安全以及游戏等方面都拥有了相当数量的专利申请。2007年，腾讯投资过亿元在北京、上海和深圳三地设立了中国互联网首家研究院—腾讯研究院，进行互联网核心基础技术的自主研发，正逐步走上自主创新的民族产业发展之路。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　成为最受尊敬的互联网企业是腾讯公司的远景目标。腾讯一直积极参与公益事业、努力承担企业社会责任、推动网络文明。2006年，腾讯成立了中国互联网首家慈善公益基金会—腾讯慈善公益基金会，并建立了腾讯公益网(gongyi.qq.com)，专注于辅助青少年教育、贫困地区发展、关爱弱势群体和救灾扶贫工作。目前，腾讯已经在全国各地陆续开展了多项公益项目，积极践行企业公民责任，为“和谐社会”建设做出贡献。</p><p><br/></p><p>愿景：</p><p><br/></p><p>　　最受尊敬的互联网企业。</p><p><br/></p><p>使命：</p><p><br/></p><p>　　通过互联网服务提升人类生活品质。</p><p><br/></p><p>价值观：</p><p><br/></p><p>　　正直，进取，合作，创新。</p><p><br/></p><p>经营理念：</p><p><br/></p><p>　　一切以用户价值为依归。</p><p><br/></p><p>管理理念：</p><p><br/></p><p>　　关心员工成长。</p><p><br/></p><p>公司战略</p><p><br/></p><p>　　腾讯以“为用户提供一站式在线生活服务”作为自己的战略目标，并基于此完成了业务布局，构建了QQ、腾讯网、QQ游戏以及拍拍网这四大网络平台，形成中国规模最大的网络社区。</p><p><br/></p>','腾讯,互联网',0,0,1,'2020-02-08 16:11:17','2020-02-08 16:11:17',2,1,'',''),
-(12,1,'腾讯公司简介','http://www.qq.com','<p>腾讯公司成立于1998年11月，是目前中国最大的互联网综合服务提供商之一，也是中国服务用户最多的互联网企业之一。成立十年多以来，腾讯一直秉承“一切以用户价值为依归”的经营理念，始终处于稳健发展的状态。2004年6月16日，腾讯公司在香港联交所主板公开上市(股票代号700)。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　通过互联网服务提升人类生活品质是腾讯公司的使命。目前，腾讯把为用户提供“一站式在线生活服务”作为战略目标，提供互联网增值服务、移动及电信增值服务和网络广告服务。通过即时通信QQ、腾讯网(QQ.com)、腾讯游戏、QQ空间、无线门户、搜搜、拍拍、财付通等中国领先的网络平台，腾讯打造了中国最大的网络社区，满足互联网用户沟通、资讯、娱乐和电子商务等方面的需求。截至2011年9月30日，QQ即时通信的活跃帐户数达到7.117亿，最高同时在线帐户数达到1.454亿。腾讯的发展深刻地影响和改变了数以亿计网民的沟通方式和生活习惯，并为中国互联网行业开创了更加广阔的应用前景。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　面向未来，坚持自主创新，树立民族品牌是腾讯公司的长远发展规划。目前，腾讯50%以上员工为研发人员。腾讯在即时通信、电子商务、在线支付、搜索引擎、信息安全以及游戏等方面都拥有了相当数量的专利申请。2007年，腾讯投资过亿元在北京、上海和深圳三地设立了中国互联网首家研究院—腾讯研究院，进行互联网核心基础技术的自主研发，正逐步走上自主创新的民族产业发展之路。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　成为最受尊敬的互联网企业是腾讯公司的远景目标。腾讯一直积极参与公益事业、努力承担企业社会责任、推动网络文明。2006年，腾讯成立了中国互联网首家慈善公益基金会—腾讯慈善公益基金会，并建立了腾讯公益网(gongyi.qq.com)，专注于辅助青少年教育、贫困地区发展、关爱弱势群体和救灾扶贫工作。目前，腾讯已经在全国各地陆续开展了多项公益项目，积极践行企业公民责任，为“和谐社会”建设做出贡献。</p><p><br/></p><p>愿景：</p><p><br/></p><p>　　最受尊敬的互联网企业。</p><p><br/></p><p>使命：</p><p><br/></p><p>　　通过互联网服务提升人类生活品质。</p><p><br/></p><p>价值观：</p><p><br/></p><p>　　正直，进取，合作，创新。</p><p><br/></p><p>经营理念：</p><p><br/></p><p>　　一切以用户价值为依归。</p><p><br/></p><p>管理理念：</p><p><br/></p><p>　　关心员工成长。</p><p><br/></p><p>公司战略</p><p><br/></p><p>　　腾讯以“为用户提供一站式在线生活服务”作为自己的战略目标，并基于此完成了业务布局，构建了QQ、腾讯网、QQ游戏以及拍拍网这四大网络平台，形成中国规模最大的网络社区。</p><p><br/></p>','腾讯,互联网',0,0,1,'2020-02-08 16:12:12','2020-02-08 16:12:12',2,1,'',''),
-(13,1,'Hello Golang','http://www.qq.com','<p>Hello hello</p>','TEST',0,0,0,'2020-02-08 16:13:41','2020-02-08 16:13:41',2,1,'',''),
-(16,1,'腾讯公司简介','http://www.qq.com','<p>腾讯公司成立于1998年11月，是目前中国最大的互联网综合服务提供商之一，也是中国服务用户最多的互联网企业之一。成立十年多以来，腾讯一直秉承“一切以用户价值为依归”的经营理念，始终处于稳健发展的状态。2004年6月16日，腾讯公司在香港联交所主板公开上市(股票代号700)。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　通过互联网服务提升人类生活品质是腾讯公司的使命。目前，腾讯把为用户提供“一站式在线生活服务”作为战略目标，提供互联网增值服务、移动及电信增值服务和网络广告服务。通过即时通信QQ、腾讯网(QQ.com)、腾讯游戏、QQ空间、无线门户、搜搜、拍拍、财付通等中国领先的网络平台，腾讯打造了中国最大的网络社区，满足互联网用户沟通、资讯、娱乐和电子商务等方面的需求。截至2011年9月30日，QQ即时通信的活跃帐户数达到7.117亿，最高同时在线帐户数达到1.454亿。腾讯的发展深刻地影响和改变了数以亿计网民的沟通方式和生活习惯，并为中国互联网行业开创了更加广阔的应用前景。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　面向未来，坚持自主创新，树立民族品牌是腾讯公司的长远发展规划。目前，腾讯50%以上员工为研发人员。腾讯在即时通信、电子商务、在线支付、搜索引擎、信息安全以及游戏等方面都拥有了相当数量的专利申请。2007年，腾讯投资过亿元在北京、上海和深圳三地设立了中国互联网首家研究院—腾讯研究院，进行互联网核心基础技术的自主研发，正逐步走上自主创新的民族产业发展之路。</p><p><br/></p><p>腾讯</p><p><br/></p><p>　　成为最受尊敬的互联网企业是腾讯公司的远景目标。腾讯一直积极参与公益事业、努力承担企业社会责任、推动网络文明。2006年，腾讯成立了中国互联网首家慈善公益基金会—腾讯慈善公益基金会，并建立了腾讯公益网(gongyi.qq.com)，专注于辅助青少年教育、贫困地区发展、关爱弱势群体和救灾扶贫工作。目前，腾讯已经在全国各地陆续开展了多项公益项目，积极践行企业公民责任，为“和谐社会”建设做出贡献。</p><p><br/></p><p>愿景：</p><p><br/></p><p>　　最受尊敬的互联网企业。</p><p><br/></p><p>使命：</p><p><br/></p><p>　　通过互联网服务提升人类生活品质。</p><p><br/></p><p>价值观：</p><p><br/></p><p>　　正直，进取，合作，创新。</p><p><br/></p><p>经营理念：</p><p><br/></p><p>　　一切以用户价值为依归。</p><p><br/></p><p>管理理念：</p><p><br/></p><p>　　关心员工成长。</p><p><br/></p><p>公司战略</p><p><br/></p><p>　　腾讯以“为用户提供一站式在线生活服务”作为自己的战略目标，并基于此完成了业务布局，构建了QQ、腾讯网、QQ游戏以及拍拍网这四大网络平台，形成中国规模最大的网络社区。</p><p><br/></p>','腾讯,互联网',0,0,1,'2020-02-08 17:05:02','2020-02-08 17:05:02',2,1,'',''),
-(17,1,'测试博客','','<p>你好，我是你的好帮手</p>','美好',0,0,1,'2020-02-08 20:06:37','2020-02-08 20:06:37',2,1,'你好，我是你的好帮手','');
+	(23,1,'欢迎使用can_blog','','<p>基于Go语言和cango框架 前端使用layui 布局 开发的个人博客系统 代码主要由 https://github.com/Echosong/beego_blog 完成，感谢ES @Echosong 的授权</p>','cango',9,0,1,'2020-02-09 21:37:26','2020-02-09 21:48:08',2,1,'cango是一个好用web开发框架',''),
+	(24,1,'can_blog简易博客系统','','<p>你好，这是一篇使用can_blog博客系统的博客。</p>','golang,博客',8,0,1,'2020-02-09 21:42:10','2020-02-09 21:47:24',4,1,'can_blog是基于cango web开发框架的博客程序。',''),
+	(25,1,'cango 是一个实验性的web开发框架','','<h1 md-src-pos=\"0..7\" style=\"font-size: 2.25em; margin: 1em 0px 16px; box-sizing: border-box; line-height: 1.2; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">cango</h1><p md-src-pos=\"8..81\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">cango 是一个实验性的web开发框架，支持模板和模板，高效的使用golang的tag特性，将路由定义、变量赋值和更多的操作通过在tag中定义。</p><h2 md-src-pos=\"84..91\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.225; font-size: 1.75em; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">路由设计</h2><p md-src-pos=\"92..151\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">Route方法注册所有的Controller<br style=\"box-sizing: border-box;\"/>Controller结构体上定义路由路径和路径上对应的变量，例如</p><pre style=\"overflow: auto; font-family: Consolas, &quot;Liberation Mono&quot;, Menlo, Courier, monospace; font-size: 13.6px; box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; font-stretch: normal; line-height: 1.45; padding: 16px; background-color: rgb(44, 44, 44); border-radius: 3px; overflow-wrap: normal; color: rgb(204, 204, 204);\">type&nbsp;Controller&nbsp;struct&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;\r\n&nbsp;&nbsp;&nbsp;&nbsp;URI&nbsp;`value:&quot;/blog/{blogName}/article/{articleId}&quot;`&nbsp;&nbsp;\r\n&nbsp;&nbsp;&nbsp;&nbsp;BlogName&nbsp;string&nbsp;&nbsp;\r\n&nbsp;&nbsp;&nbsp;&nbsp;ArticleId&nbsp;int&nbsp;&nbsp;\r\n}</pre><p md-src-pos=\"293..322\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">在Controller的方法传参上定义具体的执行方法，例如</p><pre style=\"overflow: auto; font-family: Consolas, &quot;Liberation Mono&quot;, Menlo, Courier, monospace; font-size: 13.6px; box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; font-stretch: normal; line-height: 1.45; padding: 16px; background-color: rgb(44, 44, 44); border-radius: 3px; overflow-wrap: normal; color: rgb(204, 204, 204);\">func&nbsp;(c&nbsp;*Controller)Comment(param&nbsp;struct{\r\n&nbsp;&nbsp;&nbsp;&nbsp;URI&nbsp;`value:&quot;/commnet/{commentId}.json&quot;`\r\n&nbsp;&nbsp;&nbsp;&nbsp;CommentId&nbsp;int\r\n}){\r\n&nbsp;&nbsp;&nbsp;&nbsp;//do&nbsp;sth\r\n}</pre><p md-src-pos=\"457..588\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">我们约定：<br style=\"box-sizing: border-box;\"/>1、所有的路由变量都使用{}包围<br style=\"box-sizing: border-box;\"/>2、所有的对应变量都只能使用首字母小写的驼峰来命名<br style=\"box-sizing: border-box;\"/>3、所有的路由方法必须只有一个参数，且实现了URI接口<br style=\"box-sizing: border-box;\"/>4、所有的路由方法有且只有第一个返回值做为是restful的返回值，如果没有返回值则返回{}</p><h2 md-src-pos=\"590..605\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.225; font-size: 1.75em; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">路由设计具体实现漫谈</h2><p md-src-pos=\"606..819\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">以GET方法为例说明。<br style=\"box-sizing: border-box;\"/>从Controller中抽离出路由urlC和变量列表varsC，从Controller中抽离出方法路由urlM和变量列表varsM，则urlC+urlM为路由方法最终的路由，varsC+varsM为路由方法最终的变量列表。 当某个已知的路由来时，先使用gorilla/mux包Match出指定的控制器和方法，通过反射将控制器进行初始化、通过反射对路由方法的唯一参数进行初始化，然后使用反射进行调用。</p><p md-src-pos=\"821..881\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">定义一个map来存放路由方法，由于路由方法第一个参数就是controller本身，所以可以很好的还原现场，实现调用.</p><h2 md-src-pos=\"883..891\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.225; font-size: 1.75em; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">过滤器设计</h2><p md-src-pos=\"892..966\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">过滤器要支持两种URL匹配风格，一种就是在工程已经实现的，基于controller去匹配，另外一种就是通过tag来定义，如实现最通用的AntPath</p><p><br/></p>','cango',0,0,1,'2020-02-10 09:38:00','2020-02-10 09:38:00',7,1,'cango 是一个实验性的web开发框架，支持模板和模板，高效的使用golang的tag特性，将路由定义、变量赋值和更多的操作通过在tag中定义。',''),
+	(26,1,'Yorm介绍','','<h1 md-src-pos=\"0..10\" style=\"font-size: 2.25em; margin: 1em 0px 16px; box-sizing: border-box; line-height: 1.2; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">README</h1><p md-src-pos=\"12..67\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">yOrm is a simple,lightweight orm , for mysql only now.</p><h3 md-src-pos=\"69..104\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.43; font-size: 1.5em; position: relative; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">Why this project calls yOrm</h3><p md-src-pos=\"106..163\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">yOrm is just a name.<br style=\"box-sizing: border-box;\"/>thanks [<a href=\"https://github.com/lewgun\" md-src-pos=\"137..162\" style=\"background-color: transparent; box-sizing: border-box; color: rgb(88, 157, 246); text-decoration-line: none;\">https://github.com/lewgun</a>]</p><h3 md-src-pos=\"165..195\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.43; font-size: 1.5em; position: relative; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">What is this yOrm for?</h3><ul md-src-pos=\"197..225\" style=\"box-sizing: border-box; padding: 0px 0px 0px 2em; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\" class=\" list-paddingleft-2\"><li><p>A simple mysql orm to crud</p></li></ul><h2 md-src-pos=\"227..237\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.225; font-size: 1.75em; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">Tags</h2><p md-src-pos=\"240..271\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">Now support these types of tag.</p><h3 md-src-pos=\"273..287\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.43; font-size: 1.5em; position: relative; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">column</h3><p md-src-pos=\"288..425\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">this tag alias struct name to a real column name. &quot;Id int `yorm:&quot;column(autoId)&quot;`&quot; means this field Id will name autoId in mysql column</p><h3 md-src-pos=\"427..437\" style=\"box-sizing: border-box; margin-top: 1em; margin-bottom: 16px; line-height: 1.43; font-size: 1.5em; position: relative; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">pk</h3><p md-src-pos=\"438..563\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">this tag allow you to set a primary key where select/delete/update as the where clause &quot;Id int `yorm:&quot;column(autoId);pk&quot;`&quot;</p><h1 md-src-pos=\"566..579\" style=\"font-size: 2.25em; margin: 1em 0px 16px; box-sizing: border-box; line-height: 1.2; position: relative; padding-bottom: 0.3em; border-bottom: 1px solid rgb(44, 44, 44); color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\">benchmark</h1><p md-src-pos=\"581..648\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">select by id with five fields execute 1e5 times (not very accurate)</p><blockquote md-src-pos=\"650..748\" style=\"box-sizing: border-box; margin: 0px 0px 16px; padding: 0px 15px; color: rgb(160, 164, 165); border-left: 4px solid rgb(98, 102, 103); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\"><p md-src-pos=\"652..748\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 0px;\">beegoOrm 13376 milliseconds<br style=\"box-sizing: border-box;\"/>xorm 16718 milliseconds<br style=\"box-sizing: border-box;\"/>yorm 6759 milliseconds</p></blockquote><blockquote md-src-pos=\"750..847\" style=\"box-sizing: border-box; margin: 0px 0px 16px; padding: 0px 15px; color: rgb(160, 164, 165); border-left: 4px solid rgb(98, 102, 103); font-family: Helvetica, Arial, freesans, sans-serif; white-space: normal; background-color: rgb(60, 63, 65);\"><p md-src-pos=\"752..847\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 0px;\">beegoOrm 14149 milliseconds<br style=\"box-sizing: border-box;\"/>xorm 17685 milliseconds<br style=\"box-sizing: border-box;\"/>yorm 7568 milliseconds</p></blockquote><p md-src-pos=\"849..862\" style=\"box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; color: rgb(204, 204, 204); font-family: Helvetica, Arial, freesans, sans-serif; font-size: 16px; white-space: normal; background-color: rgb(60, 63, 65);\">code is here:</p><pre style=\"overflow: auto; font-family: Consolas, &quot;Liberation Mono&quot;, Menlo, Courier, monospace; font-size: 13.6px; box-sizing: border-box; margin-top: 0px; margin-bottom: 16px; font-stretch: normal; line-height: 1.45; padding: 16px; background-color: rgb(44, 44, 44); border-radius: 3px; overflow-wrap: normal; color: rgb(204, 204, 204);\">package&nbsp;main\r\n\r\nimport&nbsp;(\r\n	&quot;beego/orm&quot;\r\n	&quot;fmt&quot;\r\n	&quot;time&quot;\r\n\r\n	&quot;github.com/JessonChan/fastfunc&quot;\r\n	&quot;github.com/JessonChan/yorm&quot;\r\n	_&nbsp;&quot;github.com/go-sql-driver/mysql&quot;\r\n	&quot;github.com/go-xorm/xorm&quot;\r\n)\r\n\r\nconst&nbsp;db&nbsp;=&nbsp;`root:@tcp(127.0.0.1:3306)/yorm_test?charset=utf8`\r\n\r\ntype&nbsp;ProgramLanguage&nbsp;struct&nbsp;{\r\n	Id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int64\r\n	Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string\r\n	RankMonth&nbsp;time.Time\r\n	Position&nbsp;&nbsp;int\r\n	Created&nbsp;&nbsp;&nbsp;time.Time\r\n}\r\n\r\nvar&nbsp;engine&nbsp;*xorm.Engine\r\nvar&nbsp;o&nbsp;orm.Ormer\r\n\r\nfunc&nbsp;init()&nbsp;{\r\n	orm.RegisterDataBase(&quot;default&quot;,&nbsp;&quot;mysql&quot;,&nbsp;db)\r\n	orm.RegisterModel(new(ProgramLanguage))\r\n	yorm.Register(db)\r\n	engine,&nbsp;_&nbsp;=&nbsp;xorm.NewEngine(&quot;mysql&quot;,&nbsp;db)\r\n	o&nbsp;=&nbsp;orm.NewOrm()\r\n}\r\n\r\nfunc&nbsp;main()&nbsp;{\r\n	fastfunc.SetRunTimes(1e5)\r\n	fmt.Println(&quot;beegoOrm&quot;,&nbsp;fastfunc.Run(beegoOrm)/1e6,&nbsp;&quot;milliseconds&quot;)\r\n	fmt.Println(&quot;&nbsp;&nbsp;&nbsp;&nbsp;xorm&quot;,&nbsp;fastfunc.Run(xomrTest)/1e6,&nbsp;&quot;milliseconds&quot;)\r\n	fmt.Println(&quot;&nbsp;&nbsp;&nbsp;&nbsp;yorm&quot;,&nbsp;fastfunc.Run(yormTest)/1e6,&nbsp;&quot;milliseconds&quot;)\r\n}\r\n\r\nfunc&nbsp;beegoOrm()&nbsp;{\r\n	p&nbsp;:=&nbsp;ProgramLanguage{Id:&nbsp;1}\r\n	o.Read(&amp;p)\r\n	if&nbsp;p.Name&nbsp;==&nbsp;&quot;&quot;&nbsp;{\r\n		panic(p)\r\n	}\r\n}\r\nfunc&nbsp;yormTest()&nbsp;{\r\n	p&nbsp;:=&nbsp;ProgramLanguage{Id:&nbsp;1}\r\n	yorm.SelectByPK(&amp;p)\r\n	if&nbsp;p.Name&nbsp;==&nbsp;&quot;&quot;&nbsp;{\r\n		panic(p)\r\n	}\r\n}\r\nfunc&nbsp;xomrTest()&nbsp;{\r\n	p&nbsp;:=&nbsp;ProgramLanguage{Id:&nbsp;1}\r\n	engine.Get(&amp;p)\r\n	if&nbsp;p.Name&nbsp;==&nbsp;&quot;&quot;&nbsp;{\r\n		panic(p)\r\n	}\r\n}</pre><p><br/></p>','golang',0,0,1,'2020-02-10 09:40:16','2020-02-10 09:40:16',7,1,'yOrm is a simple,lightweight orm , for mysql only now.','');
 
 /*!40000 ALTER TABLE `cb_post` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -161,13 +138,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_tag`;
 
 CREATE TABLE `cb_tag` (
-                          `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-                          `name` varchar(20) NOT NULL DEFAULT '' COMMENT '标签名',
-                          `count` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '使用次数',
-                          `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                          `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                          PRIMARY KEY (`id`),
-                          KEY `name` (`name`)
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '标签名',
+  `count` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '使用次数',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `cb_tag` WRITE;
@@ -175,8 +152,8 @@ LOCK TABLES `cb_tag` WRITE;
 
 INSERT INTO `cb_tag` (`id`, `name`, `count`, `created`, `updated`)
 VALUES
-(1,'iPhone',3,'2017-08-08 10:58:39','2017-08-08 10:58:39'),
-(2,'越狱',3,'2017-08-08 10:58:39','2017-08-08 10:58:39');
+	(1,'iPhone',3,'2017-08-08 10:58:39','2017-08-08 10:58:39'),
+	(2,'越狱',3,'2017-08-08 10:58:39','2017-08-08 10:58:39');
 
 /*!40000 ALTER TABLE `cb_tag` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -188,12 +165,12 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_tag_post`;
 
 CREATE TABLE `cb_tag_post` (
-                               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                               `tag_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '标签id',
-                               `post_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '内容id',
-                               PRIMARY KEY (`id`),
-                               KEY `tagid` (`tag_id`),
-                               KEY `postid` (`post_id`)
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tag_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '标签id',
+  `post_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '内容id',
+  PRIMARY KEY (`id`),
+  KEY `tagid` (`tag_id`),
+  KEY `postid` (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `cb_tag_post` WRITE;
@@ -201,12 +178,12 @@ LOCK TABLES `cb_tag_post` WRITE;
 
 INSERT INTO `cb_tag_post` (`id`, `tag_id`, `post_id`)
 VALUES
-(1,1,22),
-(2,2,22),
-(3,1,21),
-(4,2,21),
-(5,1,20),
-(6,2,20);
+	(1,1,22),
+	(2,2,22),
+	(3,1,21),
+	(4,2,21),
+	(5,1,20),
+	(6,2,20);
 
 /*!40000 ALTER TABLE `cb_tag_post` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -218,17 +195,17 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `cb_user`;
 
 CREATE TABLE `cb_user` (
-                           `id` int(11) NOT NULL AUTO_INCREMENT,
-                           `username` varchar(255) DEFAULT NULL,
-                           `password` varchar(255) DEFAULT NULL,
-                           `email` varchar(200) DEFAULT NULL,
-                           `login_count` int(11) DEFAULT NULL,
-                           `last_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                           `last_ip` varchar(200) DEFAULT 'current_timestamp()',
-                           `state` tinyint(4) DEFAULT NULL,
-                           `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                           `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                           PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  `login_count` int(11) DEFAULT NULL,
+  `last_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `last_ip` varchar(200) DEFAULT 'current_timestamp()',
+  `state` tinyint(4) DEFAULT NULL,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `cb_user` WRITE;
@@ -236,7 +213,7 @@ LOCK TABLES `cb_user` WRITE;
 
 INSERT INTO `cb_user` (`id`, `username`, `password`, `email`, `login_count`, `last_time`, `last_ip`, `state`, `created`, `updated`)
 VALUES
-(1,'admin',' e10adc3949ba59abbe56e057f20f883e','',13,NULL,'127.0.0.1:49208',0,NULL,'2017-08-08 19:48:05');
+	(1,'admin',' e10adc3949ba59abbe56e057f20f883e','',27,NULL,'127.0.0.1:64686',0,NULL,'2017-08-08 19:48:05');
 
 /*!40000 ALTER TABLE `cb_user` ENABLE KEYS */;
 UNLOCK TABLES;
