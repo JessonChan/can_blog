@@ -24,7 +24,7 @@ func main() {
 				return t.Format("2006-01-02")
 			}
 		}).
-		Run(cango.Addr{Port: 8099},
+		Run(cango.Addr{Port: 8088},
 			cango.StaticOpts{TplSuffix: []string{".html", ".tpl"}},
 		)
 }
