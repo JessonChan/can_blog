@@ -22,12 +22,6 @@ type query struct {
 	keyword string
 }
 
-func (r *PageController) Txt(ps struct {
-	cango.URI `value:"/robots.txt"`
-}) interface{} {
-	return cango.StaticFile{Path: "/static/robots.txt"}
-}
-
 func (c *PageController) list(actionName string, q query) {
 	var (
 		pagesize int = 6
