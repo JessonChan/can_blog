@@ -2,6 +2,8 @@ package main
 
 import (
 	"html/template"
+	"net/http"
+	_ "net/http/pprof"
 	"time"
 
 	"github.com/JessonChan/cango"
@@ -12,6 +14,10 @@ import (
 )
 
 func main() {
+	go func() {
+		_ = http.ListenAndServe(":6060", nil)
+	}()
+
 	can := cango.NewCan()
 	can.Route(&controllers.PageController{}).
 		Route(&controllers.ManageController{}).
