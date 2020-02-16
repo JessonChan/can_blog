@@ -147,7 +147,7 @@ func (c *PageController) Resource(struct {
 // 插入评价
 func (c *PageController) Comment(ps struct {
 	cango.URI `value:"comment.html"`
-	cango.PostMethod
+	// cango.PostMethod
 	UserName string
 	Content  string
 	Post_id  int
