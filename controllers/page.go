@@ -102,15 +102,20 @@ func (c *PageController) Detail(ps struct {
 	Id        int
 }) interface{} {
 	if ps.Id == 0 {
-		return cango.Redirect{Url: "/", Code: 302}
+		return cango.Redirect{Url: "/"}
 	}
 	c.Data = map[interface{}]interface{}{}
-	c.Data["post"] = manager.ReadPost(ps.Id)
+	post := manager.ReadPost(ps.Id)
+	if post == nil {
+		return cango.Redirect{Url: "/"}
+	}
+	c.Data["post"] = post
 	c.Data["comments"] = manager.CommentList(ps.Id)
 
 	c.Data["cates"] = manager.GetAllCate()
 	c.Data["hosts"] = manager.HotArticles(10)
 	c.Data["actionName"] = "detail"
+	c.Data["config"] = map[string]string{"title": post.Title}
 	return cango.ModelView{Tpl: "/blog/detail.html", Model: c.Data}
 }
 
