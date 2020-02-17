@@ -10,12 +10,16 @@ import (
 )
 
 func GetAllCate() (categories []models.Category) {
-	withError(yorm.R(&categories))
+	withError(func() error {
+		return yorm.R(&categories)
+	})
 	return
 }
 
 func GetConfig() (configs []models.Config) {
-	withError(yorm.R(&configs))
+	withError(func() error {
+		return yorm.R(&configs)
+	})
 	return
 }
 
