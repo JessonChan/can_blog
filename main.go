@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JessonChan/cango"
+	"github.com/JessonChan/canlog"
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/JessonChan/can_blog/controllers"
@@ -18,6 +19,7 @@ func main() {
 		_ = http.ListenAndServe(":6060", nil)
 	}()
 
+	cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
 	can := cango.NewCan()
 	can.Route(&controllers.PageController{}).
 		Route(&controllers.ManageController{}).
