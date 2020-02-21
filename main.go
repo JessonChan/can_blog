@@ -24,6 +24,7 @@ func main() {
 	can.Route(&controllers.PageController{}).
 		Route(&controllers.ManageController{}).
 		Filter(&filter.LoginFilter{}, &controllers.ManageController{}).
+		Filter(&filter.VisitFilter{}, &controllers.PageController{}).
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
 		RegTplFunc("date", func(t time.Time, f string) string {
 			if f == "Y-m-d H:i:s" {
