@@ -5,12 +5,16 @@ import (
 
 	"github.com/JessonChan/cango"
 
+	"github.com/JessonChan/can_blog/controllers"
 	"github.com/JessonChan/can_blog/session"
 )
 
 type LoginFilter struct {
 	cango.Filter
+	*controllers.ManageController
 }
+
+var _ = cango.RegisterFilter(&LoginFilter{})
 
 func (l *LoginFilter) PreHandle(req *http.Request) interface{} {
 	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {

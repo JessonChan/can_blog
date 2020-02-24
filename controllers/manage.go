@@ -22,6 +22,8 @@ type ManageController struct {
 	actionName     string
 }
 
+var _ = cango.RegisterURI(&ManageController{})
+
 func (p *ManageController) prepare(actionName string) {
 	p.Data = map[interface{}]interface{}{}
 	p.controllerName = "admin"

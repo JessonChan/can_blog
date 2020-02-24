@@ -2,29 +2,21 @@ package main
 
 import (
 	"html/template"
-	"net/http"
-	_ "net/http/pprof"
 	"time"
 
 	"github.com/JessonChan/cango"
 	"github.com/JessonChan/canlog"
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/JessonChan/can_blog/controllers"
-	"github.com/JessonChan/can_blog/filter"
+	_ "github.com/JessonChan/can_blog/controllers"
+	_ "github.com/JessonChan/can_blog/filter"
 )
 
 func main() {
-	go func() {
-		_ = http.ListenAndServe(":6060", nil)
-	}()
 
 	cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
 	can := cango.NewCan()
-	can.Route(&controllers.PageController{}).
-		Route(&controllers.ManageController{}).
-		Filter(&filter.LoginFilter{}, &controllers.ManageController{}).
-		Filter(&filter.VisitFilter{}, &controllers.PageController{}).
+	can.
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
 		RegTplFunc("date", func(t time.Time, f string) string {
 			if f == "Y-m-d H:i:s" {
@@ -34,6 +26,6 @@ func main() {
 			}
 		}).
 		Run(cango.Addr{Port: 8088},
-			cango.StaticOpts{TplSuffix: []string{".html", ".tpl"}},
+			cango.Opts{TplSuffix: []string{".html", ".tpl"}, TplDir: "views"},
 		)
 }

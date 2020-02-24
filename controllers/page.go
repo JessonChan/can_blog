@@ -16,6 +16,9 @@ type PageController struct {
 	controllerName string
 	actionName     string
 }
+
+var _ = cango.RegisterURI(&PageController{})
+
 type query struct {
 	page    int
 	cateId  int

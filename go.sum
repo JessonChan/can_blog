@@ -1,5 +1,7 @@
 github.com/JessonChan/canlog v0.0.0-20200221031056-5ad7289e75b8 h1:7km9yM/bg3GZiMw/J86kAUUvlVPTXHCDrPPBzCBzONE=
 github.com/JessonChan/canlog v0.0.0-20200221031056-5ad7289e75b8/go.mod h1:HqRDLcyEKVzIBznqSOmJjnaF+gHsOFBKA7iaTID4fXA=
+github.com/JessonChan/canlog v0.0.0-20200221095522-31177b1ce6c0 h1:KN9h7S7XTdWdDSsI0YpuTQcquAE7BEX57cMR0gY1Chc=
+github.com/JessonChan/canlog v0.0.0-20200221095522-31177b1ce6c0/go.mod h1:HqRDLcyEKVzIBznqSOmJjnaF+gHsOFBKA7iaTID4fXA=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd h1:cSaQMcv6bYdcVhFBXLiohVbumMTenXZwXLONb/axwio=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd/go.mod h1:OK2/qpG2dVcQtCwB2KXhwGMbbIv+8TR85n1NKveRh9Y=
 github.com/JessonChan/yorm v0.0.0-20150721080242-58615d853811 h1:EgoeZANsxx/Tpj5H7DqFH9n+NwYaRcdKmj41uuZj4Zs=
