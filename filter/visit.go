@@ -5,14 +5,10 @@ import (
 
 	"github.com/JessonChan/cango"
 	"github.com/JessonChan/canlog"
-
-	"github.com/JessonChan/can_blog/controllers"
 )
 
 type VisitFilter struct {
-	cango.Filter
-	*controllers.ManageController
-	*controllers.PageController
+	cango.Filter `value:"/*"`
 }
 
 var _ = cango.RegisterFilter(&VisitFilter{})

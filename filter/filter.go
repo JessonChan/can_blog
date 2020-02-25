@@ -5,13 +5,11 @@ import (
 
 	"github.com/JessonChan/cango"
 
-	"github.com/JessonChan/can_blog/controllers"
 	"github.com/JessonChan/can_blog/session"
 )
 
 type LoginFilter struct {
-	cango.Filter
-	*controllers.ManageController
+	cango.Filter `value:"/admin/*"`
 }
 
 var _ = cango.RegisterFilter(&LoginFilter{})
