@@ -14,7 +14,7 @@ type GzipFilter struct {
 	cango.Filter `value:"/static/*"`
 }
 
-var _ = cango.RegisterFilter(&GzipFilter{})
+// var _ = cango.RegisterFilter(&GzipFilter{})
 
 type gzipWriter struct {
 	http.ResponseWriter
