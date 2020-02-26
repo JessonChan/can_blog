@@ -1,6 +1,7 @@
 package filter
 
 import (
+	"compress/flate"
 	"compress/gzip"
 	"net/http"
 
@@ -22,7 +23,10 @@ type gzipWriter struct {
 
 func newGzipWriter(w http.ResponseWriter) *gzipWriter {
 	w.Header().Set("Content-Encoding", "gzip")
-	return &gzipWriter{ResponseWriter: w, gzWriter: gzip.NewWriter(w)}
+	return &gzipWriter{ResponseWriter: w, gzWriter: func() *gzip.Writer {
+		w, _ := gzip.NewWriterLevel(w, flate.BestCompression)
+		return w
+	}()}
 }
 
 func (gw *gzipWriter) Write(bs []byte) (int, error) {
