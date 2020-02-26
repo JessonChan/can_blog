@@ -8,8 +8,6 @@ import (
 	"github.com/JessonChan/cango"
 )
 
-// 对静态文件进行压缩处理，只适合于静态文件
-// 其它情况不适合
 type GzipFilter struct {
 	cango.Filter `value:"/*"`
 }
