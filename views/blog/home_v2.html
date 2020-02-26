@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>{{.actionName}}-{{.config.title}}</title>
+    <meta name="description" content="{{.config.description}}"/>
+    <meta name="Keywords" content="{{.config.keywords}}">
+    <link rel="shortcut icon" href="/static/images/f.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/home_v2.css"/>
+</head>
+<body>
+<!--[if lt IE 9]>
+<div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a
+        href="https://browsehappy.com/">升级您的浏览器</a>.
+</div>
+<![endif]-->
+<header id="header">
+    <div class="container clearfix">
+        <div class="site-name">
+            <h1>
+                <a id="logo" href="https://www.12yxp.top/">{{.config.title}}</a>
+            </h1>
+        </div>
+        <script>function Navswith() {
+                document.getElementById("header").classList.toggle("on")
+            }</script>
+        <button id="nav-swith" onclick="Navswith()"><span></span></button>
+        <div id="nav">
+            <ul class="nav-menu">
+                <li><a href="/">首页</a></li>
+                <li class="menu-parent"><a>分类</a>
+                    <ul>
+                        {{range .cates}}
+                            <li><a href="/article?cate_id={{.Id}}">{{.Name}}</a></li>
+                        {{end}}
+                    </ul>
+                </li>
+                <li><a href="/" title="关于">关于</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div id="body">
+    <div class="container clearfix">
+        <div id="main">
+            {{range .list}}
+                <article class="post">
+                    <h2 class="post-title">
+                        <a href="detail.html?id={{.Id}}">{{.Title}}</a>
+                    </h2>
+                    <ul class="post-meta">
+                        <li>{{date .Updated "Y-m-d"}}</li>
+                        <li>{{.Tags}}</li>
+                        <li>暂无评论</li>
+                        <li>{{.Views}} 次阅读</li>
+                    </ul>
+                    <div class="post-content">
+                        <p>{{.Info}}</p>
+                        <p class="more"><a href="detail.html?id={{.Id}}">- 阅读全文 -</a></p>
+                    </div>
+                </article>
+            {{end}}
+            <ol class="page-navigator">
+                <li class="current"><a href="/">1</a></li>
+                <li><span>..</span></li>
+                <li><a href="/">6</a></li>
+                <li class="next"><a href="/">下一页</a></li>
+            </ol>
+        </div>
+        <div id="secondary">
+            <section class="widget">
+                <h3 class="widget-title">最热文章</h3>
+                <ul class="widget-list">
+                    {{range .hosts}}
+                        <li><a href="detail.html?id={{.Id}}">{{.Title}}</a></li>
+                    {{end}}
+                </ul>
+            </section>
+            <section class="widget">
+                <h3 class="widget-title">目录</h3>
+                <ul class="widget-tile">
+                    {{range .cates}}
+                        <li><a href="/article?cate_id={{.Id}}">{{.Name}}</a></li>
+                    {{end}}
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+<footer id="footer">
+    <div class="container">
+        <ul class="links">
+            <li><a href="http://www.github.com/JessonChan/cango">cango 开发框架</li>
+        </ul>
+        <p>&copy; 2020 <a href="/">{{.config.title}}</a>. Powered by <a href="http://www.github.com/JessonChan/cango"
+                                                                        target="_blank">cango</a> &amp; <a
+                    href="http://www.offodd.com/17.html" target="_blank">Initial</a>.</p>
+    </div>
+</footer>
+<script>var cornertool = true;
+
+    function cl() {
+        var a = document.getElementById("catalog-col"), b = document.getElementById("catalog"),
+            c = document.getElementById("cornertool"), d;
+        if (a && !b) {
+            if (c) {
+                c = c.getElementsByTagName("ul")[0];
+                d = document.createElement("li");
+                d.setAttribute("id", "catalog");
+                d.setAttribute("onclick", "Catalogswith()");
+                d.appendChild(document.createElement("span"));
+                c.appendChild(d)
+            } else {
+                cornertool = false;
+                c = document.createElement("div");
+                c.setAttribute("id", "cornertool");
+                c.innerHTML = '<ul><li id="catalog" onclick="Catalogswith()"><span></span></li></ul>';
+                document.body.appendChild(c)
+            }
+            document.getElementById("catalog").className = a.className
+        }
+        if (!a && b) {
+            cornertool ? c.getElementsByTagName("ul")[0].removeChild(b) : document.body.removeChild(c)
+        }
+        if (a && b) {
+            b.className = a.className
+        }
+    }
+
+    cl();
+    console.log("\n%c Initial By JIElive %c http://www.offodd.com ", "color:#fff;background:#000;padding:5px 0", "color:#fff;background:#666;padding:5px 0")</script>
+</body>
+</html>

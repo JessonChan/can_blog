@@ -78,7 +78,7 @@ func (c *PageController) Home(ps struct {
 }) interface{} {
 	c.list("home", query{page: ps.Page})
 	c.Data["actionName"] = "home"
-	return cango.ModelView{Tpl: "/blog/home.html", Model: c.Data}
+	return cango.ModelView{Tpl: "/blog/home_v2.html", Model: c.Data}
 	// c.TplName = c.controllerName + "/home.html"
 }
 
@@ -92,7 +92,7 @@ func (c *PageController) Article(ps struct {
 	c.list("article", query{cateId: ps.Cate_Id})
 	c.Data["actionName"] = "article"
 	return cango.ModelView{
-		Tpl:   "/blog/article.html",
+		Tpl:   "/blog/home_v2.html",
 		Model: c.Data,
 	}
 }
@@ -118,8 +118,12 @@ func (c *PageController) Detail(ps struct {
 	c.Data["cates"] = manager.GetAllCate()
 	c.Data["hosts"] = manager.HotArticles(10)
 	c.Data["actionName"] = "detail"
-	c.Data["config"] = map[string]string{"title": post.Title}
-	return cango.ModelView{Tpl: "/blog/detail.html", Model: c.Data}
+	configs := make(map[string]string)
+	for _, v := range manager.GetConfig() {
+		configs[v.Name] = v.Value
+	}
+	c.Data["config"] = configs
+	return cango.ModelView{Tpl: "/blog/detail_v2.html", Model: c.Data}
 }
 
 /**

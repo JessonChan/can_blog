@@ -13,7 +13,7 @@ type VisitFilter struct {
 
 var _ = cango.RegisterFilter(&VisitFilter{})
 
-func (v *VisitFilter) PreHandle(req *http.Request) interface{} {
+func (v *VisitFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
 	canlog.CanDebug(req.Method, req.URL.Path, req.RemoteAddr, req.Header.Get("X-Forwarded-For"))
 	return true
 }

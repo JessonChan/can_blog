@@ -14,7 +14,7 @@ type LoginFilter struct {
 
 var _ = cango.RegisterFilter(&LoginFilter{})
 
-func (l *LoginFilter) PreHandle(req *http.Request) interface{} {
+func (l *LoginFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
 	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
 		return true
 	}
