@@ -11,10 +11,10 @@ import (
 // 对静态文件进行压缩处理，只适合于静态文件
 // 其它情况不适合
 type GzipFilter struct {
-	cango.Filter `value:"/static/*"`
+	cango.Filter `value:"/*"`
 }
 
-// var _ = cango.RegisterFilter(&GzipFilter{})
+var _ = cango.RegisterFilter(&GzipFilter{})
 
 type gzipWriter struct {
 	http.ResponseWriter
@@ -31,8 +31,10 @@ func newGzipWriter(w http.ResponseWriter) *gzipWriter {
 
 func (gw *gzipWriter) Write(bs []byte) (int, error) {
 	n, err := gw.gzWriter.Write(bs)
-	_ = gw.gzWriter.Close()
 	return n, err
+}
+func (gw *gzipWriter) Close() error {
+	return gw.gzWriter.Close()
 }
 
 func (l *GzipFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
