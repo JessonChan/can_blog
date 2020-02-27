@@ -3,9 +3,12 @@ package filter
 import (
 	"compress/flate"
 	"compress/gzip"
+	"io"
 	"net/http"
+	"reflect"
 
 	"github.com/JessonChan/cango"
+	"github.com/JessonChan/canlog"
 )
 
 type GzipFilter struct {
@@ -18,6 +21,8 @@ type gzipWriter struct {
 	http.ResponseWriter
 	gzWriter *gzip.Writer
 }
+
+var writerType = reflect.TypeOf(&gzipWriter{})
 
 func newGzipWriter(w http.ResponseWriter) *gzipWriter {
 	w.Header().Set("Content-Encoding", "gzip")
@@ -37,4 +42,14 @@ func (gw *gzipWriter) Close() error {
 
 func (l *GzipFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
 	return newGzipWriter(w)
+}
+
+func (l *GzipFilter) PostHandle(w http.ResponseWriter, req *http.Request) interface{} {
+	if reflect.TypeOf(w) == writerType {
+		err := w.(io.Closer).Close()
+		if err != nil {
+			canlog.CanError(err)
+		}
+	}
+	return true
 }

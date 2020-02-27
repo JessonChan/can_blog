@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/JessonChan/cango"
+	"github.com/JessonChan/canlog"
 	_ "github.com/go-sql-driver/mysql"
 
 	_ "github.com/JessonChan/can_blog/controllers"
@@ -13,7 +14,7 @@ import (
 
 func main() {
 
-	// cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
+	cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
 	can := cango.NewCan()
 	can.
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
