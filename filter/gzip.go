@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"reflect"
+	"strings"
 
 	"github.com/JessonChan/cango"
 	"github.com/JessonChan/canlog"
@@ -41,7 +42,10 @@ func (gw *gzipWriter) Close() error {
 }
 
 func (l *GzipFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
-	return newGzipWriter(w)
+	if strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
+		return newGzipWriter(w)
+	}
+	return true
 }
 
 func (l *GzipFilter) PostHandle(w http.ResponseWriter, req *http.Request) interface{} {
