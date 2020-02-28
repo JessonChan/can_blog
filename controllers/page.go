@@ -32,7 +32,6 @@ func (c *PageController) Home(ps struct {
 		"categories": manager.GetAllCate(),
 		"list":       manager.HomeList(ps.Page, defaultPageSize),
 		"hots":       manager.HotArticles(defaultPageSize),
-		"pageCount":  (manager.CountArticles() / defaultPageSize) + 1,
 		"nextPage":   ps.Page + 1,
 	}}
 }
@@ -53,7 +52,6 @@ func (c *PageController) Category(ps struct {
 		"categories": manager.GetAllCate(),
 		"list":       manager.CateArticles(ps.CateId, ps.Page, defaultPageSize),
 		"hots":       manager.HotArticles(defaultPageSize),
-		"pageCount":  (manager.CountCateArticles(ps.CateId) / defaultPageSize) + 1,
 		"nextPage":   ps.Page + 1,
 	}}
 }
