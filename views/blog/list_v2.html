@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <title>{{.actionName}}-{{.config.title}}</title>
+    <title>{{.config.title}}</title>
     <meta name="description" content="{{.config.description}}"/>
     <meta name="Keywords" content="{{.config.keywords}}">
     <link rel="shortcut icon" href="/static/images/f.ico" type="image/x-icon">
@@ -28,8 +28,8 @@
                 <li><a href="/">首页</a></li>
                 <li class="menu-parent"><a>分类</a>
                     <ul>
-                        {{range .cates}}
-                            <li><a href="/article?cate_id={{.Id}}">{{.Name}}</a></li>
+                        {{range .categories}}
+                            <li><a href="/category?cateId={{.Id}}">{{.Name}}</a></li>
                         {{end}}
                     </ul>
                 </li>
@@ -59,17 +59,14 @@
                 </article>
             {{end}}
             <ol class="page-navigator">
-                <li class="current"><a href="/">1</a></li>
-                <li><span>..</span></li>
-                <li><a href="/">6</a></li>
-                <li class="next"><a href="/">下一页</a></li>
+                <li class="next"><a href="#?page={{.nextPage}}">下一页</a></li>
             </ol>
         </div>
         <div id="secondary">
             <section class="widget">
                 <h3 class="widget-title">最热文章</h3>
                 <ul class="widget-list">
-                    {{range .hosts}}
+                    {{range .hots}}
                         <li><a href="detail.html?id={{.Id}}">{{.Title}}</a></li>
                     {{end}}
                 </ul>
@@ -77,8 +74,8 @@
             <section class="widget">
                 <h3 class="widget-title">目录</h3>
                 <ul class="widget-tile">
-                    {{range .cates}}
-                        <li><a href="/article?cate_id={{.Id}}">{{.Name}}</a></li>
+                    {{range .categories}}
+                        <li><a href="/category?cateId={{.Id}}">{{.Name}}</a></li>
                     {{end}}
                 </ul>
             </section>

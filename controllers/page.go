@@ -7,67 +7,15 @@ import (
 
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/models"
-	"github.com/JessonChan/can_blog/util"
 )
 
 type PageController struct {
 	cango.URI
-	Data           map[interface{}]interface{}
-	controllerName string
-	actionName     string
 }
 
 var _ = cango.RegisterURI(&PageController{})
 
-type query struct {
-	page    int
-	cateId  int
-	keyword string
-}
-
-func (c *PageController) list(actionName string, q query) {
-	var (
-		pagesize int = 6
-		page     int
-		offset   int
-		list     []models.Post
-		// cateId   int
-		// keyword  string
-	)
-
-	var result = manager.GetConfig()
-	configs := make(map[string]string)
-	for _, v := range result {
-		configs[v.Name] = v.Value
-	}
-
-	c.Data = map[interface{}]interface{}{}
-	c.Data["cates"] = manager.GetAllCate()
-	c.Data["config"] = configs
-
-	if q.page < 1 {
-		page = 1
-	}
-
-	var count int
-	offset = (page - 1) * pagesize
-	if q.cateId == 0 {
-		count = manager.CountArticles()
-		if count > offset {
-			list = manager.NewArticles(offset, pagesize)
-		}
-	} else {
-		count = manager.CountCateArticles(q.cateId)
-		if count > offset {
-			list = manager.CateArticles(q.cateId, offset, pagesize)
-		}
-	}
-	c.Data["count"] = count
-
-	c.Data["list"] = list
-	c.Data["pagebar"] = util.NewPager(page, int(count), pagesize, "/"+actionName, true).ToString()
-	c.Data["hosts"] = manager.HotArticles(10)
-}
+var defaultPageSize = 10
 
 /**
 首页
@@ -76,25 +24,38 @@ func (c *PageController) Home(ps struct {
 	cango.URI `value:"/;/home.html"`
 	Page      int
 }) interface{} {
-	c.list("home", query{page: ps.Page})
-	c.Data["actionName"] = "home"
-	return cango.ModelView{Tpl: "/blog/home_v2.html", Model: c.Data}
-	// c.TplName = c.controllerName + "/home.html"
+	if ps.Page == 0 {
+		ps.Page = 1
+	}
+	return cango.ModelView{Tpl: "/blog/list_v2.html", Model: map[string]interface{}{
+		"config":     manager.GetConfigMap(),
+		"categories": manager.GetAllCate(),
+		"list":       manager.HomeList(ps.Page, defaultPageSize),
+		"hots":       manager.HotArticles(defaultPageSize),
+		"pageCount":  (manager.CountArticles() / defaultPageSize) + 1,
+		"nextPage":   ps.Page + 1,
+	}}
 }
 
 /**
 列表页面
 */
-func (c *PageController) Article(ps struct {
-	cango.URI `value:"/article.html;/article"`
-	Cate_Id   int
+func (c *PageController) Category(ps struct {
+	cango.URI `value:"/category.html;/category"`
+	CateId    int
+	Page      int
 }) interface{} {
-	c.list("article", query{cateId: ps.Cate_Id})
-	c.Data["actionName"] = "article"
-	return cango.ModelView{
-		Tpl:   "/blog/home_v2.html",
-		Model: c.Data,
+	if ps.Page == 0 {
+		ps.Page = 1
 	}
+	return cango.ModelView{Tpl: "/blog/list_v2.html", Model: map[string]interface{}{
+		"config":     manager.GetConfigMap(),
+		"categories": manager.GetAllCate(),
+		"list":       manager.CateArticles(ps.CateId, ps.Page, defaultPageSize),
+		"hots":       manager.HotArticles(defaultPageSize),
+		"pageCount":  (manager.CountCateArticles(ps.CateId) / defaultPageSize) + 1,
+		"nextPage":   ps.Page + 1,
+	}}
 }
 
 /**
@@ -107,53 +68,14 @@ func (c *PageController) Detail(ps struct {
 	if ps.Id == 0 {
 		return cango.Redirect{Url: "/"}
 	}
-	c.Data = map[interface{}]interface{}{}
-	post := manager.ReadPost(ps.Id)
-	if post == nil {
-		return cango.Redirect{Url: "/"}
-	}
-	c.Data["post"] = post
-	c.Data["comments"] = manager.CommentList(ps.Id)
-
-	c.Data["cates"] = manager.GetAllCate()
-	c.Data["hosts"] = manager.HotArticles(10)
-	c.Data["actionName"] = "detail"
-	configs := make(map[string]string)
-	for _, v := range manager.GetConfig() {
-		configs[v.Name] = v.Value
-	}
-	c.Data["config"] = configs
-	return cango.ModelView{Tpl: "/blog/detail_v2.html", Model: c.Data}
-}
-
-/**
-关于我们
-*/
-func (c *PageController) About(struct {
-	cango.URI `value:"about.html"`
-}) interface{} {
-	c.Data = map[interface{}]interface{}{}
-	c.Data["post"] = manager.ReadPost(1)
-	c.Data["actionName"] = "about"
-	return cango.ModelView{Tpl: "/blog/about.html", Model: c.Data}
-}
-
-// 时间线
-func (c *PageController) Timeline(struct {
-	cango.URI `value:"timeline.html"`
-}) interface{} {
-	c.Data = map[interface{}]interface{}{}
-	c.Data["actionName"] = "timeline"
-	return cango.ModelView{Tpl: "/blog/timeline.html", Model: c.Data}
-}
-
-// 资源
-func (c *PageController) Resource(struct {
-	cango.URI `value:"resource.html"`
-}) interface{} {
-	c.list("resource", query{})
-	c.Data["actionName"] = "resource"
-	return cango.ModelView{Tpl: "/blog/resource.html", Model: c.Data}
+	return cango.ModelView{Tpl: "/blog/detail_v2.html", Model: map[string]interface{}{
+		"config":     manager.GetConfigMap(),
+		"categories": manager.GetAllCate(),
+		"hots":       manager.HotArticles(defaultPageSize),
+		"post":       manager.ReadPost(ps.Id),
+		"before":     manager.BeforePost(ps.Id),
+		"next":       manager.NextPost(ps.Id),
+	}}
 }
 
 // 插入评价

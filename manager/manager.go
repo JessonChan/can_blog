@@ -22,6 +22,14 @@ func GetConfig() (configs []models.Config) {
 	})
 	return
 }
+func GetConfigMap() map[string]string {
+	var result = GetConfig()
+	configs := make(map[string]string)
+	for _, v := range result {
+		configs[v.Name] = v.Value
+	}
+	return configs
+}
 
 func UpdateConfig(k, v string) {
 	_, err := yorm.Update("update "+new(models.Config).TableName()+" set value=? where name=? and value<>?", v, k, v)
@@ -90,6 +98,21 @@ func DeletePost(postId int) (int64, error) {
 	return yorm.Delete("delete from "+new(models.Post).TableName()+" where id=?", postId)
 }
 
+func BeforePost(id int) *models.Post {
+	post := &models.Post{}
+	withError(func() error {
+		return yorm.Select(post, "select * from "+new(models.Post).TableName()+" where id<? order by id desc", id)
+	})
+	return post
+}
+func NextPost(id int) *models.Post {
+	post := &models.Post{}
+	withError(func() error {
+		return yorm.Select(post, "select * from "+new(models.Post).TableName()+" where id>? order by id asc", id)
+	})
+	return post
+}
+
 func ReadPost(postId int, readOnly ...bool) *models.Post {
 	post := &models.Post{Id: postId}
 	err := yorm.R(post)
@@ -137,6 +160,20 @@ func CountCateArticles(cateId int) int {
 		canlog.CanError(err)
 	}
 	return cnt
+}
+func HomeList(page, size int) (list []models.Post) {
+	if page <= 0 {
+		page = 1
+	}
+	if size <= 0 {
+		size = 10
+	}
+	offset := (page - 1) * size
+	err := yorm.Select(&list, "select * from "+new(models.Post).TableName()+" where is_top=1  order by updated desc limit ?,? ", offset, size)
+	if err != nil {
+		canlog.CanError(err)
+	}
+	return
 }
 
 func NewArticles(offset, size int) (list []models.Post) {
