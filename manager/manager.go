@@ -183,7 +183,14 @@ func NewArticles(offset, size int) (list []models.Post) {
 	}
 	return
 }
-func CateArticles(cateId, offset, size int) (list []models.Post) {
+func CateArticles(cateId, page, size int) (list []models.Post) {
+	if page <= 0 {
+		page = 1
+	}
+	if size <= 0 {
+		size = 10
+	}
+	offset := (page - 1) * size
 	err := yorm.R(&list, "select * from "+new(models.Post).TableName()+" where is_top=1  and category_id=? order by updated desc limit ?,?", cateId, offset, size)
 	if err != nil {
 		canlog.CanError(err)
