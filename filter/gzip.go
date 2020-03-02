@@ -21,6 +21,7 @@ var _ = cango.RegisterFilter(&GzipFilter{})
 type gzipWriter struct {
 	http.ResponseWriter
 	gzWriter *gzip.Writer
+	written  bool
 }
 
 var writerType = reflect.TypeOf(&gzipWriter{})
@@ -34,11 +35,15 @@ func newGzipWriter(w http.ResponseWriter) *gzipWriter {
 }
 
 func (gw *gzipWriter) Write(bs []byte) (int, error) {
+	gw.written = true
 	n, err := gw.gzWriter.Write(bs)
 	return n, err
 }
 func (gw *gzipWriter) Close() error {
-	return gw.gzWriter.Close()
+	if gw.written {
+		return gw.gzWriter.Close()
+	}
+	return nil
 }
 
 func (l *GzipFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
