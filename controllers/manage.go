@@ -235,8 +235,7 @@ func (c *ManageController) Save(ps struct {
 		manager.UpdatePost(post)
 	}
 	return cango.Redirect{
-		Url:  "/admin/index.html",
-		Code: 302,
+		Url: "/admin/index.html",
 	}
 
 }
