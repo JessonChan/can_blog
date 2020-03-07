@@ -173,65 +173,39 @@ func (c *ManageController) Article(ps struct {
 	}
 }
 
-// // 上传接口
-// func (c *ManageController) Upload() {
-// 	f, h, err := c.GetFile("uploadname")
-// 	result := make(map[string]interface{})
-// 	img := ""
-// 	if err == nil {
-// 		exStrArr := strings.Split(h.Filename, ".")
-// 		exStr := strings.ToLower(exStrArr[len(exStrArr)-1])
-// 		if exStr != "jpg" && exStr != "png" && exStr != "gif" {
-// 			result["code"] = 1
-// 			result["message"] = "上传只能.jpg 或者png格式"
-// 		}
-// 		img = "/static/upload/" + util.UniqueId() + "." + exStr
-// 		c.SaveToFile("upFilename", img) // 保存位置在 static/upload, 没有文件夹要先创建
-// 		result["code"] = 0
-// 		result["message"] = img
-// 	} else {
-// 		result["code"] = 2
-// 		result["message"] = "上传异常" + err.Error()
-// 	}
-// 	defer f.Close()
-// 	c.Data["json"] = result
-// 	c.ServeJSON()
-// }
-
 // 保存
 func (c *ManageController) Save(ps struct {
 	cango.URI `value:"/save"`
 	cango.PostMethod
-	Post_id int
+	PostId  int `name:"post_id"`
 	Title   string
 	Content string
-	Is_top  int8
+	IsTop   int8 `name:"is_top"`
 	Types   int8
 	Tags    string
 	Url     string
-	Cate_id int
+	CateId  int `name:"cate_id"`
 	Info    string
 	Image   string
 }) interface{} {
-	c.prepare("save")
 	post := models.Post{}
 	post.UserId = 1
 	post.Title = ps.Title
 	post.Content = ps.Content
-	post.IsTop = ps.Is_top
+	post.IsTop = ps.IsTop
 	post.Types = ps.Types
 	post.Tags = ps.Tags
 	post.Url = ps.Url
-	post.CategoryId = ps.Cate_id
+	post.CategoryId = ps.CateId
 	post.Info = ps.Info
 	post.Image = ps.Image
 	post.Created = time.Now()
 	post.Updated = time.Now()
 
-	if ps.Post_id == 0 {
+	if ps.PostId == 0 {
 		manager.AddPost(post)
 	} else {
-		post.Id = ps.Post_id
+		post.Id = ps.PostId
 		manager.UpdatePost(post)
 	}
 	return cango.Redirect{
@@ -250,7 +224,6 @@ func (c *ManageController) Delete(ps struct {
 	cango.URI `value:"/delete;/delete.html"`
 	Id        int
 }) interface{} {
-	c.prepare("delete")
 	if ps.Id == 0 {
 		return getErrorContent("参数错误")
 	}
@@ -264,11 +237,9 @@ func (c *ManageController) Delete(ps struct {
 func (c *ManageController) Category(struct {
 	cango.URI `value:"category;category.html"`
 }) interface{} {
-	c.prepare("category")
-	c.Data["categorys"] = manager.GetAllCate()
 	return cango.ModelView{
 		Tpl:   "/admin/category.html",
-		Model: c.Data,
+		Model: manager.GetAllCate(),
 	}
 }
 
@@ -277,13 +248,9 @@ func (c *ManageController) Categoryadd(ps struct {
 	cango.URI `value:"/categoryadd;categoryadd.html"`
 	Id        int
 }) interface{} {
-	c.prepare("categoryadd")
-	if ps.Id != 0 {
-		c.Data["cate"] = manager.ReadCate(ps.Id)
-	}
 	return cango.ModelView{
 		Tpl:   "/admin/category_add.html",
-		Model: c.Data,
+		Model: manager.ReadCate(ps.Id),
 	}
 }
 
@@ -294,7 +261,6 @@ func (c *ManageController) CategorySave(ps struct {
 	Id   int
 	Name string
 }) interface{} {
-	c.prepare("categorysave")
 	category := models.Category{}
 	category.Name = ps.Name
 	if ps.Id == 0 {
@@ -311,7 +277,6 @@ func (c *ManageController) CategoryDel(ps struct {
 	cango.URI `value:"categorydel;categorydel.html"`
 	Id        int
 }) interface{} {
-	c.prepare("categorydel")
 	if ps.Id == 0 {
 		return getErrorContent("参数错误")
 	}
