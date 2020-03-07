@@ -1,3 +1,5 @@
 .idea/workspace.xml
 .idea/dataSources/5a693f95-1c05-4264-9763-c316e216ff4d.xml
 .idea/dataSources/5a693f95-1c05-4264-9763-c316e216ff4d/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
+.vscode/launch.json
+__debug_bin
