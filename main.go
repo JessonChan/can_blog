@@ -13,8 +13,9 @@ import (
 )
 
 func main() {
-
-	cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
+	if cango.Env("log") != "console" {
+		cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
+	}
 	can := cango.NewCan()
 	can.
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
