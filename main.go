@@ -14,7 +14,7 @@ import (
 
 func main() {
 	if cango.Env("log") != "console" {
-		cango.InitLogger(canlog.NewFileWriter("/tmp/can_blog.log"))
+		cango.InitLogger(canlog.NewFileWriter(cango.Env("log")))
 	}
 	can := cango.NewCan()
 	can.
