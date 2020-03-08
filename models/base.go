@@ -12,6 +12,12 @@ func InitDB() {
 	_ = yorm.Register(cango.Env("dsn"))
 	yorm.InitLogger(canlog.GetLogger())
 	yorm.SetLoggerLevel(yorm.Debug)
+	yorm.RegisterTableFunc(TableName)
+}
+
+// 返回带前缀的表名
+func TableName(str string) string {
+	return "cb_" + str
 }
 
 // 对应的表结构
