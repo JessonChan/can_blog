@@ -14,7 +14,7 @@
         <label class="layui-form-label">选择类别</label>
         <div class="layui-input-block">
             <select name="cate_id" lay-verify="required">
-                {{range .categorys}}
+                {{range .categories}}
                 <option value="{{.Id}}" >{{.Name}}</option>
                 {{end}}
             </select>

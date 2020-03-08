@@ -7,28 +7,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/JessonChan/cango"
-
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/models"
 	"github.com/JessonChan/can_blog/session"
 	"github.com/JessonChan/can_blog/util"
+	"github.com/JessonChan/cango"
 )
 
+// ManageController 是管理后台的控制器
 type ManageController struct {
-	cango.URI      `value:"/admin"`
-	Data           map[interface{}]interface{}
-	controllerName string
-	actionName     string
+	cango.URI `value:"/admin"`
 }
 
 var _ = cango.RegisterURI(&ManageController{})
-
-func (p *ManageController) prepare(actionName string) {
-	p.Data = map[interface{}]interface{}{}
-	p.controllerName = "admin"
-	p.actionName = actionName
-}
 
 // 配置信息
 func (c *ManageController) Config(ps struct {
@@ -43,8 +34,6 @@ func (c *ManageController) Config(ps struct {
 	Start       string
 	Qq          string
 }) interface{} {
-	c.prepare("config")
-
 	if c.Request().Request.Method == http.MethodPost {
 		keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
 		values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
@@ -54,16 +43,9 @@ func (c *ManageController) Config(ps struct {
 			}
 		}
 	}
-	cfs := manager.GetConfig()
-	options := map[string]string{}
-
-	for _, cf := range cfs {
-		options[cf.Name] = cf.Value
-	}
-	c.Data["config"] = options
 	return cango.ModelView{
 		Tpl:   "/admin/config.html",
-		Model: c.Data,
+		Model: map[string]interface{}{"config": manager.GetConfigMap()},
 	}
 }
 
@@ -75,11 +57,9 @@ func (c *ManageController) Login(ps struct {
 	Username string
 	Password string
 }) interface{} {
-	c.prepare("login")
 	if c.Request().Request.Method == http.MethodGet {
 		return cango.ModelView{
-			Tpl:   "/admin/login.html",
-			Model: c.Data,
+			Tpl: "/admin/login.html",
 		}
 	}
 	user := manager.GetUserByName(ps.Username)
@@ -102,7 +82,6 @@ func (c *ManageController) Login(ps struct {
 func (c *ManageController) Logout(struct {
 	cango.URI `value:"/logout;/logout.html"`
 }) interface{} {
-	c.prepare("logout")
 	u, _ := session.LocalSession.Get(c.Request().Request, session.UserCookieName)
 	u.Values["user"] = nil
 	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
@@ -113,36 +92,35 @@ func (c *ManageController) Logout(struct {
 func (c *ManageController) Index(ps struct {
 	cango.URI `value:"/index;/index.html"`
 	Title     string
-	Cate_id   int
+	CateId    int `name:"cate_id"`
 	Page      int
 }) interface{} {
-	c.prepare("index")
-	c.Data["categorys"] = manager.GetAllCate()
 	var (
 		page     int
 		pagesize int = 8
 		offset   int
-		// list     []*models.Post
-		keyword string
-		cateId  int
+		keyword  string
+		cateId   int
 	)
+	model := map[string]interface{}{}
+	model["categories"] = manager.GetAllCate()
 	keyword = ps.Title
-	cateId = ps.Cate_id
+	cateId = ps.CateId
 	if page = ps.Page; page < 1 {
 		page = 1
 	}
 	offset = (page - 1) * pagesize
 
-	c.Data["keyword"] = keyword
+	model["keyword"] = keyword
 	count := manager.CountArticles()
-	c.Data["count"] = count
-	c.Data["list"] = manager.NewArticles(offset, pagesize)
-	c.Data["cate_id"] = cateId
-	c.Data["pagebar"] = util.NewPager(page, int(count), pagesize,
+	model["count"] = count
+	model["list"] = manager.NewArticles(offset, pagesize)
+	model["cate_id"] = cateId
+	model["pagebar"] = util.NewPager(page, int(count), pagesize,
 		fmt.Sprintf("/admin/index.html?keyword=%s", keyword), true).ToString()
 	return cango.ModelView{
 		Tpl:   "/admin/list.html",
-		Model: c.Data,
+		Model: model,
 	}
 }
 
@@ -150,10 +128,8 @@ func (c *ManageController) Index(ps struct {
 func (c *ManageController) Main(struct {
 	cango.URI `value:"main;main.html"`
 }) interface{} {
-	c.prepare("main")
 	return cango.ModelView{
-		Tpl:   "/admin/main.html",
-		Model: c.Data,
+		Tpl: "/admin/main.html",
 	}
 }
 
@@ -162,14 +138,14 @@ func (c *ManageController) Article(ps struct {
 	cango.URI `value:"/article;/article.html"`
 	Id        int
 }) interface{} {
-	c.prepare("article")
+	model := map[string]interface{}{}
 	if ps.Id > 0 {
-		c.Data["post"] = manager.ReadPost(ps.Id, true)
+		model["post"] = manager.ReadPost(ps.Id, true)
 	}
-	c.Data["categorys"] = manager.GetAllCate()
+	model["categories"] = manager.GetAllCate()
 	return cango.ModelView{
 		Tpl:   "/admin/_form.html",
-		Model: c.Data,
+		Model: model,
 	}
 }
 
