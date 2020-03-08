@@ -4,8 +4,8 @@ github.com/JessonChan/canlog v0.0.0-20200304145432-b1013a9ba390 h1:ownmwuTk68I4l
 github.com/JessonChan/canlog v0.0.0-20200304145432-b1013a9ba390/go.mod h1:HqRDLcyEKVzIBznqSOmJjnaF+gHsOFBKA7iaTID4fXA=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd h1:cSaQMcv6bYdcVhFBXLiohVbumMTenXZwXLONb/axwio=
 github.com/JessonChan/jsun v0.0.0-20200206041800-028ef18516bd/go.mod h1:OK2/qpG2dVcQtCwB2KXhwGMbbIv+8TR85n1NKveRh9Y=
-github.com/JessonChan/yorm v0.0.0-20200210013033-cdb5bf2d16d9 h1:PsPuyv0Fyd1uIhe7DzzvmXicMssjmpLMI4JNgpLOQcQ=
-github.com/JessonChan/yorm v0.0.0-20200210013033-cdb5bf2d16d9/go.mod h1:TMPKAdn5OwM3BwrZgv24ngTXbtftOr4p7TRrj9JrlQg=
+github.com/JessonChan/yorm v0.0.0-20200308082146-b216344c6cef h1:dKDzrA8N3eJQWWQF6Eu0FBIPtfuTSiA2RY/iTsRAP5Y=
+github.com/JessonChan/yorm v0.0.0-20200308082146-b216344c6cef/go.mod h1:TMPKAdn5OwM3BwrZgv24ngTXbtftOr4p7TRrj9JrlQg=
 github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
 github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/gorilla/securecookie v1.1.1 h1:miw7JPhV+b/lAHSXz4qd/nN9jRiAFV5FwjeKyCS8BvQ=

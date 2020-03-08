@@ -10,12 +10,14 @@ import (
 
 	_ "github.com/JessonChan/can_blog/controllers"
 	_ "github.com/JessonChan/can_blog/filter"
+	"github.com/JessonChan/can_blog/models"
 )
 
 func main() {
 	if cango.Env("log") != "console" {
 		cango.InitLogger(canlog.NewFileWriter(cango.Env("log")))
 	}
+	models.InitDB()
 	can := cango.NewCan()
 	can.
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
