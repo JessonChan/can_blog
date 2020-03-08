@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/JessonChan/cango"
-	"github.com/JessonChan/canlog"
 	_ "github.com/go-sql-driver/mysql"
 
 	_ "github.com/JessonChan/can_blog/controller"
@@ -14,12 +13,8 @@ import (
 )
 
 func main() {
-	if cango.Env("log") != "console" {
-		cango.InitLogger(canlog.NewFileWriter(cango.Env("log")))
-	}
 	model.InitDB()
-	can := cango.NewCan()
-	can.
+	cango.NewCan().
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
 		RegTplFunc("date", func(t time.Time, f string) string {
 			if f == "Y-m-d H:i:s" {
@@ -28,5 +23,5 @@ func main() {
 				return t.Format("2006-01-02")
 			}
 		}).
-		Run(cango.Addr{Port: 8088})
+		Run()
 }
