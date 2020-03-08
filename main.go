@@ -8,16 +8,16 @@ import (
 	"github.com/JessonChan/canlog"
 	_ "github.com/go-sql-driver/mysql"
 
-	_ "github.com/JessonChan/can_blog/controllers"
+	_ "github.com/JessonChan/can_blog/controller"
 	_ "github.com/JessonChan/can_blog/filter"
-	"github.com/JessonChan/can_blog/models"
+	"github.com/JessonChan/can_blog/model"
 )
 
 func main() {
 	if cango.Env("log") != "console" {
 		cango.InitLogger(canlog.NewFileWriter(cango.Env("log")))
 	}
-	models.InitDB()
+	model.InitDB()
 	can := cango.NewCan()
 	can.
 		RegTplFunc("str2html", func(s string) template.HTML { return template.HTML(s) }).
@@ -28,7 +28,5 @@ func main() {
 				return t.Format("2006-01-02")
 			}
 		}).
-		Run(cango.Addr{Port: 8088},
-			cango.Opts{TplSuffix: []string{".html", ".tpl"}, TplDir: "views"},
-		)
+		Run(cango.Addr{Port: 8088})
 }
