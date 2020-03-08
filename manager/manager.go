@@ -6,17 +6,17 @@ import (
 	"github.com/JessonChan/canlog"
 	"github.com/JessonChan/yorm"
 
-	"github.com/JessonChan/can_blog/models"
+	"github.com/JessonChan/can_blog/model"
 )
 
-func GetAllCate() (categories []models.Category) {
+func GetAllCate() (categories []model.Category) {
 	withError(func() error {
 		return yorm.R(&categories)
 	})
 	return
 }
 
-func GetConfig() (configs []models.Config) {
+func GetConfig() (configs []model.Config) {
 	withError(func() error {
 		return yorm.R(&configs)
 	})
@@ -38,8 +38,8 @@ func UpdateConfig(k, v string) {
 	}
 }
 
-func GetUserByName(name string) *models.User {
-	user := &models.User{}
+func GetUserByName(name string) *model.User {
+	user := &model.User{}
 	err := yorm.Select(user, "select * from cb_user  where username=?", name)
 	if err != nil {
 		canlog.CanError(err)
@@ -47,7 +47,7 @@ func GetUserByName(name string) *models.User {
 	return user
 }
 
-func AddComment(comment models.Comment) error {
+func AddComment(comment model.Comment) error {
 	_, err := yorm.Insert(&comment)
 	if err != nil {
 		canlog.CanError(err)
@@ -55,8 +55,8 @@ func AddComment(comment models.Comment) error {
 	return err
 }
 
-func ReadCate(cateId int) *models.Category {
-	cate := models.Category{}
+func ReadCate(cateId int) *model.Category {
+	cate := model.Category{}
 	err := yorm.Select(&cate, "select * from cb_category where id=?", cateId)
 	if err != nil {
 		canlog.CanError(err)
@@ -64,13 +64,13 @@ func ReadCate(cateId int) *models.Category {
 	return &cate
 }
 
-func AddCate(cate models.Category) {
+func AddCate(cate model.Category) {
 	_, err := yorm.Insert(&cate)
 	if err != nil {
 		canlog.CanError(err)
 	}
 }
-func UpdateCate(cate models.Category) {
+func UpdateCate(cate model.Category) {
 	_, err := yorm.Update("update cb_category set name=? ,updated=now() where id=? ", cate.Name, cate.Id)
 	if err != nil {
 		canlog.CanError(err)
@@ -81,13 +81,13 @@ func DeleteCate(cateId int) (int64, error) {
 	return yorm.Delete("delete from cb_category  where id=?", cateId)
 }
 
-func AddPost(post models.Post) {
+func AddPost(post model.Post) {
 	_, err := yorm.Insert(&post)
 	if err != nil {
 		canlog.CanError(err)
 	}
 }
-func UpdatePost(ps models.Post) {
+func UpdatePost(ps model.Post) {
 	_, err := yorm.Update("update cb_post set title=?,content=?,category_id=?,info=?,  updated=now() where id=?", ps.Title, ps.Content, ps.CategoryId, ps.Info, ps.Id)
 	if err != nil {
 		canlog.CanError(err)
@@ -98,23 +98,23 @@ func DeletePost(postId int) (int64, error) {
 	return yorm.Delete("delete from cb_post where id=?", postId)
 }
 
-func BeforePost(id int) *models.Post {
-	post := &models.Post{}
+func BeforePost(id int) *model.Post {
+	post := &model.Post{}
 	withError(func() error {
 		return yorm.Select(post, "select * from cb_post where id<? order by id desc", id)
 	})
 	return post
 }
-func NextPost(id int) *models.Post {
-	post := &models.Post{}
+func NextPost(id int) *model.Post {
+	post := &model.Post{}
 	withError(func() error {
 		return yorm.Select(post, "select * from cb_post where id>? order by id asc", id)
 	})
 	return post
 }
 
-func ReadPost(postId int, readOnly ...bool) *models.Post {
-	post := &models.Post{Id: postId}
+func ReadPost(postId int, readOnly ...bool) *model.Post {
+	post := &model.Post{Id: postId}
 	err := yorm.R(post)
 	if err != nil {
 		canlog.CanError(err)
@@ -131,8 +131,8 @@ func ReadPost(postId int, readOnly ...bool) *models.Post {
 	post.Views++
 	return post
 }
-func CommentList(postId int) []models.Comment {
-	var list []models.Comment
+func CommentList(postId int) []model.Comment {
+	var list []model.Comment
 	err := yorm.R(&list, "select * from cb_comment where post_id=?", postId)
 	if err != nil {
 		canlog.CanError(err)
@@ -140,7 +140,7 @@ func CommentList(postId int) []models.Comment {
 	return list
 }
 
-func HotArticles(limit int) (hots []models.Post) {
+func HotArticles(limit int) (hots []model.Post) {
 	_ = yorm.Select(&hots, "select * from cb_post order by views desc limit "+fmt.Sprint(limit))
 	return
 }
@@ -161,7 +161,7 @@ func CountCateArticles(cateId int) int {
 	}
 	return cnt
 }
-func HomeList(page, size int) (list []models.Post) {
+func HomeList(page, size int) (list []model.Post) {
 	if page <= 0 {
 		page = 1
 	}
@@ -176,14 +176,14 @@ func HomeList(page, size int) (list []models.Post) {
 	return
 }
 
-func NewArticles(offset, size int) (list []models.Post) {
+func NewArticles(offset, size int) (list []model.Post) {
 	err := yorm.Select(&list, "select * from cb_post where is_top=1  order by updated desc limit ?,? ", offset, size)
 	if err != nil {
 		canlog.CanError(err)
 	}
 	return
 }
-func CateArticles(cateId, page, size int) (list []models.Post) {
+func CateArticles(cateId, page, size int) (list []model.Post) {
 	if page <= 0 {
 		page = 1
 	}
