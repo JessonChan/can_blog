@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 	"github.com/JessonChan/cango"
 
 	"github.com/JessonChan/can_blog/manager"
-	"github.com/JessonChan/can_blog/models"
+	"github.com/JessonChan/can_blog/model"
 )
 
 type PageController struct {
@@ -84,7 +84,7 @@ func (c *PageController) Comment(ps struct {
 	Content  string
 	Post_id  int
 }) interface{} {
-	comment := models.Comment{}
+	comment := model.Comment{}
 	comment.Username = ps.UserName
 	comment.Content = ps.Content
 	comment.PostId = ps.Post_id

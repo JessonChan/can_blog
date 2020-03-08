@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/JessonChan/can_blog/manager"
-	"github.com/JessonChan/can_blog/models"
+	"github.com/JessonChan/can_blog/model"
 	"github.com/JessonChan/can_blog/session"
 	"github.com/JessonChan/can_blog/util"
 	"github.com/JessonChan/cango"
@@ -165,7 +165,7 @@ func (c *ManageController) Save(ps struct {
 	Info    string
 	Image   string
 }) interface{} {
-	post := models.Post{}
+	post := model.Post{}
 	post.UserId = 1
 	post.Title = ps.Title
 	post.Content = ps.Content
@@ -239,7 +239,7 @@ func (c *ManageController) CategorySave(ps struct {
 	Id   int
 	Name string
 }) interface{} {
-	category := models.Category{}
+	category := model.Category{}
 	category.Name = ps.Name
 	if ps.Id == 0 {
 		manager.AddCate(category)
