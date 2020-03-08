@@ -21,7 +21,7 @@ type ManageController struct {
 
 var _ = cango.RegisterURI(&ManageController{})
 
-// 配置信息
+// Config 配置信息
 func (c *ManageController) Config(ps struct {
 	cango.URI `value:"/config;/config.html"`
 	cango.PostMethod
@@ -49,7 +49,7 @@ func (c *ManageController) Config(ps struct {
 	}
 }
 
-// 后台用户登录
+// Login 后台用户登录
 func (c *ManageController) Login(ps struct {
 	cango.URI `value:"/login;/login.html"`
 	cango.PostMethod
@@ -79,6 +79,7 @@ func (c *ManageController) Login(ps struct {
 	return cango.Redirect{Url: "/admin/main"}
 }
 
+// Logout 退出
 func (c *ManageController) Logout(struct {
 	cango.URI `value:"/logout;/logout.html"`
 }) interface{} {
@@ -88,7 +89,7 @@ func (c *ManageController) Logout(struct {
 	return cango.Redirect{Url: "/admin/main"}
 }
 
-// 后台首页
+// Index 后台首页
 func (c *ManageController) Index(ps struct {
 	cango.URI `value:"/index;/index.html"`
 	Title     string
@@ -124,7 +125,7 @@ func (c *ManageController) Index(ps struct {
 	}
 }
 
-// 主页
+// Main 主页
 func (c *ManageController) Main(struct {
 	cango.URI `value:"main;main.html"`
 }) interface{} {
@@ -133,7 +134,7 @@ func (c *ManageController) Main(struct {
 	}
 }
 
-// 文章
+// Article 文章
 func (c *ManageController) Article(ps struct {
 	cango.URI `value:"/article;/article.html"`
 	Id        int
@@ -149,7 +150,7 @@ func (c *ManageController) Article(ps struct {
 	}
 }
 
-// 保存
+// Save 保存
 func (c *ManageController) Save(ps struct {
 	cango.URI `value:"/save"`
 	cango.PostMethod
@@ -196,6 +197,7 @@ func getErrorContent(msg string) cango.Content {
 	}
 }
 
+// Delete Delete
 func (c *ManageController) Delete(ps struct {
 	cango.URI `value:"/delete;/delete.html"`
 	Id        int
@@ -209,7 +211,7 @@ func (c *ManageController) Delete(ps struct {
 	return cango.Redirect{Url: "/admin/index.html"}
 }
 
-// 类目
+// Category 类目
 func (c *ManageController) Category(struct {
 	cango.URI `value:"category;category.html"`
 }) interface{} {
@@ -219,7 +221,7 @@ func (c *ManageController) Category(struct {
 	}
 }
 
-// 添加修改类目
+// Categoryadd 添加修改类目
 func (c *ManageController) Categoryadd(ps struct {
 	cango.URI `value:"/categoryadd;categoryadd.html"`
 	Id        int
@@ -230,7 +232,7 @@ func (c *ManageController) Categoryadd(ps struct {
 	}
 }
 
-// 处理插入数据的字段
+// CategorySave 处理插入数据的字段
 func (c *ManageController) CategorySave(ps struct {
 	cango.URI `value:"categorysave;categorysave.html"`
 	cango.PostMethod
@@ -249,6 +251,7 @@ func (c *ManageController) CategorySave(ps struct {
 	return cango.Redirect{Url: "/admin/category.html"}
 }
 
+// CategoryDel CategoryDel
 func (c *ManageController) CategoryDel(ps struct {
 	cango.URI `value:"categorydel;categorydel.html"`
 	Id        int
