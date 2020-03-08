@@ -9,7 +9,10 @@ import (
 )
 
 func InitDB() {
-	_ = yorm.Register(cango.Env("dsn"))
+	err := yorm.Register(cango.Env("dsn"))
+	if err != nil {
+		canlog.CanError(err)
+	}
 	yorm.InitLogger(canlog.GetLogger())
 	yorm.SetLoggerLevel(yorm.Debug)
 	yorm.RegisterTableFunc(TableName)
