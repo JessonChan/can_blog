@@ -16,11 +16,10 @@ type manageCtrl struct {
 var _ = cango.RegisterURI(&manageCtrl{})
 
 type LoginUser struct {
-	cango.FormValue
-	// cango.CookieValue
+	cango.Constructor
 	UserName  string
 	Password  string
-	TimeToken string `cookie:"_token"`
+	TimeToken string `cookie:"_can_blog_token"`
 }
 
 func (m *manageCtrl) Login(ps struct {
@@ -31,7 +30,7 @@ func (m *manageCtrl) Login(ps struct {
 	if ps.URI.Request().Method == http.MethodGet {
 		// set token
 		http.SetCookie(ps.Request().ResponseWriter, &http.Cookie{
-			Name:     "_token",
+			Name:     "_can_blog_token",
 			Value:    fmt.Sprintf("%d", time.Now().Nanosecond()),
 			Path:     "/",
 			Expires:  time.Now().AddDate(0, 0, 7),
