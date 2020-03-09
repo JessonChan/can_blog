@@ -9,13 +9,16 @@ import (
 )
 
 type LoginFilter struct {
-	cango.Filter `value:"/admin/*"`
+	cango.Filter `value:"/admin/*;/manage/*"`
 }
 
 var _ = cango.RegisterFilter(&LoginFilter{})
 
 func (l *LoginFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
 	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
+		return true
+	}
+	if req.URL.Path == "/manage/login" {
 		return true
 	}
 	u, _ := session.LocalSession.Get(req, session.UserCookieName)
