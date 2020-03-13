@@ -97,6 +97,5 @@ func (c *PageController) Comment(ps struct {
 	}
 	return cango.Content{
 		String: "<script>alert('" + msg + "');window.history.go(-1);</script>",
-		Code:   200,
 	}
 }
