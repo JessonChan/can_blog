@@ -9,7 +9,6 @@ import (
 	"github.com/JessonChan/cango"
 
 	"github.com/JessonChan/can_blog/manager"
-	"github.com/JessonChan/can_blog/util"
 )
 
 type manageCtrl struct {
@@ -37,7 +36,7 @@ func (l *LoginUser) Construct(r *http.Request) {
 		l.isLogin = false
 		return
 	}
-	if util.Md5(l.Password) != strings.Trim(user.Password, " ") {
+	if l.Password != strings.Trim(user.Password, " ") {
 		l.isLogin = false
 		return
 	}
