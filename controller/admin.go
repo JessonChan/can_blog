@@ -52,7 +52,7 @@ func (m *manageCtrl) Login(ps struct {
 		// set token
 		http.SetCookie(ps.Request().ResponseWriter, &http.Cookie{
 			Name:     "_can_blog_token",
-			Value:    fmt.Sprintf("%d", time.Now().Nanosecond()),
+			Value:    fmt.Sprintf("%d", time.Now().UnixNano()),
 			Path:     "/",
 			Expires:  time.Now().AddDate(0, 0, 7),
 			MaxAge:   0,
