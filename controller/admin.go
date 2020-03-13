@@ -3,10 +3,13 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/JessonChan/cango"
-	"github.com/JessonChan/canlog"
+
+	"github.com/JessonChan/can_blog/manager"
+	"github.com/JessonChan/can_blog/util"
 )
 
 type manageCtrl struct {
@@ -19,7 +22,26 @@ type LoginUser struct {
 	cango.Constructor
 	UserName  string
 	Password  string
-	TimeToken string `cookie:"_can_blog_token"`
+	TimeToken int64 `cookie:"_can_blog_token"`
+	isLogin   bool
+}
+
+func (l *LoginUser) Construct(r *http.Request) {
+	tk := time.Time{}.Add(time.Duration(l.TimeToken))
+	if tk.Sub(time.Now()) > 5*time.Minute {
+		l.isLogin = false
+		return
+	}
+	user := manager.GetUserByName(l.UserName)
+	if user == nil || user.Password == "" {
+		l.isLogin = false
+		return
+	}
+	if util.Md5(l.Password) != strings.Trim(user.Password, " ") {
+		l.isLogin = false
+		return
+	}
+	l.isLogin = true
 }
 
 func (m *manageCtrl) Login(ps struct {
@@ -41,8 +63,8 @@ func (m *manageCtrl) Login(ps struct {
 			Tpl: "/manage/login.html",
 		}
 	}
-	if lu.UserName == "hello" && lu.Password == "nihao" {
-		canlog.CanError(lu.TimeToken)
+	if lu.isLogin == false {
+		return cango.Redirect{Url: "/manage/login"}
 	}
-	return cango.Redirect{Url: "/"}
+	return cango.Redirect{Url: "/manage/main"}
 }
