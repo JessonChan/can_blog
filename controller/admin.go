@@ -27,16 +27,13 @@ type LoginUser struct {
 
 func (l *LoginUser) Construct(r *http.Request) {
 	if time.Duration(time.Now().UnixNano()-l.TimeToken) > 5*time.Minute {
-		l.isLogin = false
 		return
 	}
 	user := manager.GetUserByName(l.UserName)
 	if user == nil || user.Password == "" {
-		l.isLogin = false
 		return
 	}
 	if l.Password != strings.Trim(user.Password, " ") {
-		l.isLogin = false
 		return
 	}
 	l.isLogin = true
