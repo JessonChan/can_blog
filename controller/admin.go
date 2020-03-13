@@ -26,8 +26,7 @@ type LoginUser struct {
 }
 
 func (l *LoginUser) Construct(r *http.Request) {
-	tk := time.Time{}.Add(time.Duration(l.TimeToken))
-	if tk.Sub(time.Now()) > 5*time.Minute {
+	if time.Duration(time.Now().UnixNano()-l.TimeToken) > 5*time.Minute {
 		l.isLogin = false
 		return
 	}
