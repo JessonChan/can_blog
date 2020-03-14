@@ -9,6 +9,7 @@ import (
 	"github.com/JessonChan/cango"
 
 	"github.com/JessonChan/can_blog/manager"
+	"github.com/JessonChan/can_blog/model"
 )
 
 type manageCtrl struct {
@@ -23,6 +24,7 @@ type LoginUser struct {
 	Password  string
 	TimeToken int64 `cookie:"_can_blog_token"`
 	isLogin   bool
+	user      *model.User
 }
 
 func (l *LoginUser) Construct(r *http.Request) {
@@ -36,6 +38,7 @@ func (l *LoginUser) Construct(r *http.Request) {
 	if l.Password != strings.Trim(user.Password, " ") {
 		return
 	}
+	l.user = user
 	l.isLogin = true
 }
 
@@ -44,9 +47,8 @@ func (m *manageCtrl) Login(ps struct {
 	cango.GetMethod
 	cango.PostMethod
 }, lu *LoginUser) interface{} {
-	if ps.URI.Request().Method == http.MethodGet {
-		// set token
-		http.SetCookie(ps.Request().ResponseWriter, &http.Cookie{
+	if ps.Request().IsGet() {
+		ps.Request().SetCookie(&http.Cookie{
 			Name:     "_can_blog_token",
 			Value:    fmt.Sprintf("%d", time.Now().UnixNano()),
 			Path:     "/",
