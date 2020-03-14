@@ -48,14 +48,7 @@ func (m *manageCtrl) Login(ps struct {
 	cango.PostMethod
 }, lu *LoginUser) interface{} {
 	if ps.Request().IsGet() {
-		ps.Request().SetCookie(&http.Cookie{
-			Name:     "_can_blog_token",
-			Value:    fmt.Sprintf("%d", time.Now().UnixNano()),
-			Path:     "/",
-			Expires:  time.Now().AddDate(0, 0, 7),
-			MaxAge:   0,
-			HttpOnly: true,
-		})
+		ps.Request().SetCookie(newCookie())
 		return cango.ModelView{
 			Tpl: "/manage/login.html",
 		}
@@ -64,4 +57,15 @@ func (m *manageCtrl) Login(ps struct {
 		return cango.Redirect{Url: "/manage/login"}
 	}
 	return cango.Redirect{Url: "/manage/main"}
+}
+
+func newCookie() *http.Cookie {
+	return &http.Cookie{
+		Name:     "_can_blog_token",
+		Value:    fmt.Sprintf("%d", time.Now().UnixNano()),
+		Path:     "/",
+		Expires:  time.Now().AddDate(0, 0, 7),
+		MaxAge:   0,
+		HttpOnly: true,
+	}
 }
