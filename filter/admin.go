@@ -8,16 +8,13 @@ import (
 	"github.com/JessonChan/can_blog/session"
 )
 
-type LoginFilter struct {
-	cango.Filter `value:"/admin/*"`
+type AdminFilter struct {
+	cango.Filter `value:"/manage/*"`
 }
 
-var _ = cango.RegisterFilter(&LoginFilter{})
+var _ = cango.RegisterFilter(&AdminFilter{})
 
-func (l *LoginFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
-	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
-		return true
-	}
+func (l *AdminFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
 	if req.URL.Path == "/manage/login" {
 		return true
 	}
