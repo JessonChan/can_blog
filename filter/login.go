@@ -18,9 +18,6 @@ func (l *LoginFilter) PreHandle(w http.ResponseWriter, req *http.Request) interf
 	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
 		return true
 	}
-	if req.URL.Path == "/manage/login" {
-		return true
-	}
 	u, _ := session.LocalSession.Get(req, session.UserCookieName)
 	if u.IsNew {
 		return cango.Redirect{Url: "/admin/login"}
