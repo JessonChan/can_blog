@@ -7,11 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/JessonChan/cango"
+
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/model"
 	"github.com/JessonChan/can_blog/session"
 	"github.com/JessonChan/can_blog/util"
-	"github.com/JessonChan/cango"
 )
 
 // ManageController 是管理后台的控制器
@@ -67,7 +68,7 @@ func (c *ManageController) Login(ps struct {
 		return getErrorContent("账号不存在")
 	}
 
-	if util.Md5(ps.Password) != strings.Trim(user.Password, " ") {
+	if ps.Password != strings.Trim(user.Password, " ") {
 		return getErrorContent("密码错误")
 	}
 	u, _ := session.LocalSession.New(c.Request().Request, session.UserCookieName)

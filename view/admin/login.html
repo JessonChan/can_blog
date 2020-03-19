@@ -21,8 +21,9 @@
 </head>
 <body>
 <script type="text/javascript" src="/static/plug/layui/layui.js"></script>
+<script type="text/javascript" src="/static/js/login.js"></script>
 <div class="main layui-clear">
-    <form action="/admin/login" method="post">
+    <form action="/admin/login" method="post" onsubmit="doLogin()">
         <div class="fly-panel fly-panel-user" pad20>
             <div class="layui-tab layui-tab-brief">
                 <ul class="layui-tab-title">
@@ -42,9 +43,10 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">密码</label>
                             <div class="layui-input-inline">
-                                <input type="password" name="password" required lay-verify="password"
+                                <input id="pwd" type="password"  required lay-verify="password"
                                        placeholder="密码" autocomplete="off" class="layui-input">
                             </div>
+                            <input type='hidden' name='password' id='md5_pwd' value=''/>
                         </div>
 
                         <div class="layui-form-item" style="float: right; margin-right: 42px;">
@@ -69,7 +71,6 @@
 
 </body>
 <script>
-    //Demo
     layui.use('form', function () {
     });
 </script>
