@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/JessonChan/can_blog/manager"
 	"github.com/JessonChan/can_blog/model"
-	"github.com/JessonChan/can_blog/session"
 	"github.com/JessonChan/can_blog/util"
 )
 
@@ -71,12 +69,7 @@ func (c *ManageController) Login(ps struct {
 	if ps.Password != strings.Trim(user.Password, " ") {
 		return getErrorContent("密码错误")
 	}
-	u, _ := session.LocalSession.New(c.Request().Request, session.UserCookieName)
-	u.Values["user"] = ps.Username
-	err := u.Save(c.Request().Request, c.Request().ResponseWriter)
-	if err != nil {
-		log.Println("login in error", err)
-	}
+	c.Request().SessionPut("user", ps.Username)
 	return cango.Redirect{Url: "/admin/main"}
 }
 
@@ -84,9 +77,7 @@ func (c *ManageController) Login(ps struct {
 func (c *ManageController) Logout(struct {
 	cango.URI `value:"/logout;/logout.html"`
 }) interface{} {
-	u, _ := session.LocalSession.Get(c.Request().Request, session.UserCookieName)
-	u.Values["user"] = nil
-	_ = u.Save(c.Request().Request, c.Request().ResponseWriter)
+	c.Request().SessionPut("user", nil)
 	return cango.Redirect{Url: "/admin/main"}
 }
 
