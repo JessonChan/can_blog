@@ -1,8 +1,6 @@
 package filter
 
 import (
-	"net/http"
-
 	"github.com/JessonChan/cango"
 )
 
@@ -12,12 +10,12 @@ type LoginFilter struct {
 
 var _ = cango.RegisterFilter(&LoginFilter{})
 
-func (l *LoginFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
+func (l *LoginFilter) PreHandle(req *cango.WebRequest) interface{} {
 	if req.URL.Path == "/admin/login" || req.URL.Path == "/admin/login.html" {
 		return true
 	}
 	var userName string
-	cango.SessionGet(req, "user", &userName)
+	req.SessionGet("user", &userName)
 	if userName == "admin" {
 		return true
 	}

@@ -46,16 +46,16 @@ func (gw *gzipWriter) Close() error {
 	return nil
 }
 
-func (l *GzipFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
-	if strings.Contains(req.Header.Get("Accept-Encoding"), "gzip") {
-		return newGzipWriter(w)
+func (l *GzipFilter) PreHandle(req *cango.WebRequest) interface{} {
+	if strings.Contains(req.Request.Header.Get("Accept-Encoding"), "gzip") {
+		return newGzipWriter(req.ResponseWriter)
 	}
 	return true
 }
 
-func (l *GzipFilter) PostHandle(w http.ResponseWriter, req *http.Request) interface{} {
-	if reflect.TypeOf(w) == writerType {
-		err := w.(io.Closer).Close()
+func (l *GzipFilter) PostHandle(w *cango.WebRequest) interface{} {
+	if reflect.TypeOf(w.ResponseWriter) == writerType {
+		err := w.ResponseWriter.(io.Closer).Close()
 		if err != nil {
 			canlog.CanError(err)
 		}

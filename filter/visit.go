@@ -1,8 +1,6 @@
 package filter
 
 import (
-	"net/http"
-
 	"github.com/JessonChan/cango"
 	"github.com/JessonChan/canlog"
 )
@@ -13,7 +11,7 @@ type VisitFilter struct {
 
 var _ = cango.RegisterFilter(&VisitFilter{})
 
-func (v *VisitFilter) PreHandle(w http.ResponseWriter, req *http.Request) interface{} {
-	canlog.CanDebug(req.Method, req.URL.Path, req.RemoteAddr, req.Header.Get("X-Forwarded-For"))
+func (v *VisitFilter) PreHandle(req *cango.WebRequest) interface{} {
+	canlog.CanDebug(req.Method, req.URL.Path, req.RemoteAddr, req.Request.Header.Get("X-Forwarded-For"))
 	return true
 }
