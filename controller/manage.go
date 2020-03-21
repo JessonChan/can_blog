@@ -95,8 +95,8 @@ func (c *ManageController) Index(ps struct {
 		keyword  string
 		cateId   int
 	)
-	model := map[string]interface{}{}
-	model["categories"] = manager.GetAllCate()
+	dataModel := map[string]interface{}{}
+	dataModel["categories"] = manager.GetAllCate()
 	keyword = ps.Title
 	cateId = ps.CateId
 	if page = ps.Page; page < 1 {
@@ -104,16 +104,16 @@ func (c *ManageController) Index(ps struct {
 	}
 	offset = (page - 1) * pagesize
 
-	model["keyword"] = keyword
+	dataModel["keyword"] = keyword
 	count := manager.CountArticles()
-	model["count"] = count
-	model["list"] = manager.NewArticles(offset, pagesize)
-	model["cate_id"] = cateId
-	model["pagebar"] = util.NewPager(page, int(count), pagesize,
+	dataModel["count"] = count
+	dataModel["list"] = manager.NewArticles(offset, pagesize)
+	dataModel["cate_id"] = cateId
+	dataModel["pagebar"] = util.NewPager(page, int(count), pagesize,
 		fmt.Sprintf("/admin/index.html?keyword=%s", keyword), true).ToString()
 	return cango.ModelView{
 		Tpl:   "/admin/list.html",
-		Model: model,
+		Model: dataModel,
 	}
 }
 
