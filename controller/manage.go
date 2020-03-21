@@ -56,7 +56,7 @@ func (c *ManageController) Login(ps struct {
 	Username string
 	Password string
 }) interface{} {
-	if c.Request().Request.Method == http.MethodGet {
+	if ps.Request().IsGet() {
 		return cango.ModelView{
 			Tpl: "/admin/login.html",
 		}
