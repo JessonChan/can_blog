@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 	"time"
 
@@ -23,8 +22,18 @@ var _ = cango.RegisterURI(&ManageController{})
 // Config 配置信息
 func (c *ManageController) Config(ps struct {
 	cango.URI `value:"/config;/config.html"`
-	cango.PostMethod
 	cango.GetMethod
+}) interface{} {
+	return cango.ModelView{
+		Tpl:   "/admin/config.html",
+		Model: map[string]interface{}{"config": manager.GetConfigMap()},
+	}
+}
+
+// Config 配置信息
+func (c *ManageController) ConfigPost(ps struct {
+	cango.URI `value:"/config;/config.html"`
+	cango.PostMethod
 	Url         string
 	Title       string
 	Keywords    string
@@ -33,13 +42,11 @@ func (c *ManageController) Config(ps struct {
 	Start       string
 	Qq          string
 }) interface{} {
-	if c.Request().Request.Method == http.MethodPost {
-		keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
-		values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
-		for idx, key := range keys {
-			if values[idx] != "" {
-				manager.UpdateConfig(key, values[idx])
-			}
+	keys := []string{"url", "title", "keywords", "description", "email", "start", "qq"}
+	values := []string{ps.Url, ps.Title, ps.Keywords, ps.Description, ps.Email, ps.Start, ps.Qq}
+	for idx, key := range keys {
+		if values[idx] != "" {
+			manager.UpdateConfig(key, values[idx])
 		}
 	}
 	return cango.ModelView{
@@ -51,16 +58,20 @@ func (c *ManageController) Config(ps struct {
 // Login 后台用户登录
 func (c *ManageController) Login(ps struct {
 	cango.URI `value:"/login;/login.html"`
-	cango.PostMethod
 	cango.GetMethod
+}) interface{} {
+	return cango.ModelView{
+		Tpl: "/admin/login.html",
+	}
+}
+
+// Login 后台用户登录
+func (c *ManageController) DoLogin(ps struct {
+	cango.URI `value:"/login;/login.html"`
+	cango.PostMethod
 	Username string
 	Password string
 }) interface{} {
-	if ps.Request().IsGet() {
-		return cango.ModelView{
-			Tpl: "/admin/login.html",
-		}
-	}
 	user := manager.GetUserByName(ps.Username)
 	if user == nil || user.Password == "" {
 		return getErrorContent("账号不存在")
@@ -131,14 +142,14 @@ func (c *ManageController) Article(ps struct {
 	cango.URI `value:"/article;/article.html"`
 	Id        int
 }) interface{} {
-	model := map[string]interface{}{}
+	articleModel := map[string]interface{}{}
 	if ps.Id > 0 {
-		model["post"] = manager.ReadPost(ps.Id, true)
+		articleModel["post"] = manager.ReadPost(ps.Id, true)
 	}
-	model["categories"] = manager.GetAllCate()
+	articleModel["categories"] = manager.GetAllCate()
 	return cango.ModelView{
 		Tpl:   "/admin/_form.html",
-		Model: model,
+		Model: articleModel,
 	}
 }
 
