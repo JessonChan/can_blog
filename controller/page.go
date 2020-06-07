@@ -82,12 +82,12 @@ func (c *PageController) Comment(ps struct {
 	// cango.PostMethod
 	UserName string
 	Content  string
-	Post_id  int
+	PostId   int `value:"post_id"`
 }) interface{} {
 	comment := model.Comment{}
 	comment.Username = ps.UserName
 	comment.Content = ps.Content
-	comment.PostId = ps.Post_id
+	comment.PostId = ps.PostId
 	comment.Ip = c.Request().Request.RemoteAddr
 	comment.Created = time.Now()
 	msg := "发布评价成功"
